@@ -29,30 +29,30 @@ less than a minute. They must understand how to play without reading anything lo
 - **Languages:** French, English, Dutch, like the portfolio.
 - **Stack:** TypeScript + Vite + Canvas 2D, no framework. The goal is to ship, not to learn
   a new technology.
-- **Mobile:** bottom control bar, icons only at ~390 px, speed in a small menu, touch targets
+- **Mobile:** bottom control bar, two rows at ~390 px (timeline above, tools and speed slider below), touch targets
   ≥ 44 px, respects the iPhone safe area. Initial zoom ≈ 16 px per cell.
 - **Later (not v1):** famous patterns (glider, Gosper gun…), other rules (HighLife, Seeds…), RLE
   import/export, sharing a pattern by URL.
 
 ## Features (v1)
 
-| Feature            | Behaviour                                                                                               |
-| ------------------ | ------------------------------------------------------------------------------------------------------- |
-| Draw / erase       | Gestures above. A whole stroke is one history entry.                                                    |
-| Play / pause       | `K`, short Space press, or the play button.                                                             |
-| Previous           | `J` or button: restores the previous state (generation **or** edit). Disabled when history is empty.    |
-| Next               | `L` or button: replays the "future" if we rewound, otherwise computes one generation.                   |
-| Speed              | 1–60 generations/s, default 10. Range slider on desktop, menu on mobile.                                |
-| Random fill        | Fills the visible area at ~25 % density. One history entry.                                             |
-| Clear              | Removes every cell and resets the counter to 0. One history entry, so `J` undoes it.                    |
-| Generation counter | Shown in JetBrains Mono. Goes back with `J`.                                                            |
-| Zoom               | Wheel / pinch / `+` `-`. Range 2–64 px per cell. Grid lines only at ≥ 8 px.                             |
-| Pan                | Space + drag / middle drag / two fingers / arrow keys.                                                  |
-| Recenter           | `0` or button: fits the live cells (or the origin if empty).                                            |
-| Help               | `?` or button: opens the controls panel; Escape closes it.                                              |
-| Theme              | Toggle like the portfolio (`dataset.theme` + `localStorage.theme`, defaults to `prefers-color-scheme`). |
-| Language           | Switcher like the portfolio (flag + code, menu of Français / English / Nederlands).                     |
-| Portfolio link     | "← Portfolio" to `https://leonard-fontaine.com/<lang>`.                                                 |
+| Feature            | Behaviour                                                                                                                   |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------- |
+| Draw / erase       | Gestures above. A whole stroke is one history entry.                                                                        |
+| Play / pause       | `K`, short Space press, or the play button.                                                                                 |
+| Previous           | `J` or button: restores the previous state (generation **or** edit). Disabled when history is empty.                        |
+| Next               | `L` or button: replays the "future" if we rewound, otherwise computes one generation.                                       |
+| Speed              | 1–30 generations/s, default 4, on a progressive slider (left half = 1–6/s). Same slider on mobile, on the bar's second row. |
+| Random fill        | Fills the visible area at ~25 % density. One history entry.                                                                 |
+| Clear              | Removes every cell and resets the counter to 0. One history entry, so `J` undoes it.                                        |
+| Generation counter | Shown in JetBrains Mono. Goes back with `J`.                                                                                |
+| Zoom               | Wheel / pinch / `+` `-`. Range 2–64 px per cell. Grid lines only at ≥ 8 px.                                                 |
+| Pan                | Space + drag / middle drag / two fingers / arrow keys.                                                                      |
+| Recenter           | `0` or button: fits the live cells (or the origin if empty).                                                                |
+| Help               | `?` or button: opens the controls panel; Escape closes it.                                                                  |
+| Theme              | Toggle like the portfolio (`dataset.theme` + `localStorage.theme`, defaults to `prefers-color-scheme`).                     |
+| Language           | Switcher like the portfolio (flag + code, menu of Français / English / Nederlands).                                         |
+| Portfolio link     | "← Portfolio" to `https://leonard-fontaine.com/<lang>`.                                                                     |
 
 ### Safety limits
 

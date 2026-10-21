@@ -64,8 +64,15 @@
       <span class="row-break" aria-hidden="true"></span>
       <label class="speed">
         <span class="visually-hidden">Speed</span>
-        <input id="speed" type="range" min="1" max="60" value="10" />
-        <output id="speed-value" for="speed">10/s</output>
+        <input
+          id="speed"
+          type="range"
+          min="0"
+          max="100"
+          value="41"
+          aria-valuetext="4 generations per second"
+        />
+        <output id="speed-value" for="speed">4/s</output>
       </label>
       <button class="icon-button" id="random" type="button" aria-label="Random fill">
         <svg viewBox="0 0 20 20" aria-hidden="true">

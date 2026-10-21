@@ -19,6 +19,11 @@ export interface ControlState {
 
 const byId = <T extends HTMLElement>(id: string) => document.getElementById(id) as T
 
+// Progressive slider: position 0–100 maps to 1–30 generations/s, so the left half covers the
+// slow speeds people actually watch (1–6/s).
+const MAX_SPEED = 30
+const speedAt = (position: number) => Math.round(MAX_SPEED ** (position / 100))
+
 export function attachControls(actions: ControlActions): (state: ControlState) => void {
   const play = byId<HTMLButtonElement>('play')
   const previous = byId<HTMLButtonElement>('previous')
@@ -32,7 +37,7 @@ export function attachControls(actions: ControlActions): (state: ControlState) =
   byId('random').addEventListener('click', actions.randomFill)
   byId('clear').addEventListener('click', actions.clear)
   byId('recenter').addEventListener('click', actions.recenter)
-  speed.addEventListener('input', () => actions.setSpeed(speed.valueAsNumber))
+  speed.addEventListener('input', () => actions.setSpeed(speedAt(speed.valueAsNumber)))
 
   return (state) => {
     play.classList.toggle('playing', state.playing)
@@ -41,6 +46,8 @@ export function attachControls(actions: ControlActions): (state: ControlState) =
     previous.setAttribute('aria-disabled', String(!state.canGoBack))
     generation.value = String(state.generation)
     speedValue.value = `${state.speed}/s`
+    const unit = state.speed === 1 ? 'generation' : 'generations'
+    speed.setAttribute('aria-valuetext', `${state.speed} ${unit} per second`)
     notice.hidden = !state.limitReached
   }
 }
