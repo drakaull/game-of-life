@@ -6,7 +6,7 @@ is checked with `playwright-cli` in light + dark, desktop + ~390 px, Chrome + Fi
 
 ## Phase 1: Setup
 
-- [ ] **Task 0: Repository and tooling**
+- [x] **Task 0: Repository and tooling**
   - Acceptance:
     - `git init` with `main`; spec, plan, `.gitignore` committed (`docs: add spec and plan`); `develop` created.
     - Dependency list with exact versions and publish dates (all ≥ 2 weeks old) **approved by Léonard before install**.
@@ -31,6 +31,7 @@ is checked with `playwright-cli` in light + dark, desktop + ~390 px, Chrome + Fi
   - Scope: S
 
 ### Checkpoint A: Engine
+
 - [ ] All tests pass, coverage ≥ 90 % on `src/engine`
 - [ ] Review (`/code-review`), merge `feature/engine` → `develop` after Léonard's "yes"
 
@@ -61,6 +62,7 @@ is checked with `playwright-cli` in light + dark, desktop + ~390 px, Chrome + Fi
   - Scope: M
 
 ### Checkpoint B: Board
+
 - [ ] Glider runs, drawing/zoom/pan work with mouse and in mobile emulation
 - [ ] Performance figure reported to Léonard
 - [ ] Review, merge `feature/board` → `develop` after "yes"
@@ -92,6 +94,7 @@ is checked with `playwright-cli` in light + dark, desktop + ~390 px, Chrome + Fi
   - Scope: S
 
 ### Checkpoint C: Controls
+
 - [ ] Spec success criteria 1–5 pass
 - [ ] Léonard tries it on a real phone (`npm run dev -- --host` on the local network)
 - [ ] Review, merge `feature/controls` → `develop` after "yes"
@@ -111,6 +114,7 @@ is checked with `playwright-cli` in light + dark, desktop + ~390 px, Chrome + Fi
   - Scope: S
 
 ### Checkpoint D: Languages and theme
+
 - [ ] Spec success criteria 6–7 pass
 - [ ] Review, merge `feature/i18n-theme` → `develop` after "yes"
 
@@ -129,6 +133,7 @@ is checked with `playwright-cli` in light + dark, desktop + ~390 px, Chrome + Fi
   - Scope: S
 
 ### Final checkpoint: Release v1.0.0
+
 - [ ] All 10 spec success criteria met
 - [ ] Full review before merge
 - [ ] Merge `feature/release-prep` → `develop`, then `develop` → `main` ("Release v1.0.0"), annotated tag `v1.0.0`, push main, develop and tag, each after Léonard's "yes"

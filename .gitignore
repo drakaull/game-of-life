@@ -1,0 +1,12 @@
+# Node
+node_modules/
+dist/
+coverage/
+*.log
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea/

@@ -59,14 +59,14 @@ setup (repo, tooling)
 
 ## Risks and Mitigations
 
-| Risk | Impact | Mitigation |
-|---|---|---|
-| `Set<number>` engine too slow for criterion 4 (30 gen/s, full 1080p soup at 8 px) | Med | Measured in Task 6 with a soup benchmark. Fallback: reuse a typed-array neighbour count. The engine sits behind `step()`, so only one file changes. |
-| Space doing two things (tap = play, hold+drag = pan) feels wrong | Low | Built in Task 7 and checked by hand at Checkpoint C. Fallback: Space = play only, pan with middle drag. |
-| Gesture conflicts on touch (draw vs two-finger pan, page scroll/zoom) | Med | `touch-action: none` on the canvas; a stroke is cancelled if a second finger lands. Real-phone check at Checkpoint C. |
-| Fonts or theme flash before first paint under a strict CSP | Low | `public/theme-init.js` as an external blocking script; fonts bundled by Vite. Checked in Task 13. |
-| Dependency versions < 2 weeks old | Low | Versions listed with their publish dates in Task 0 for your approval before `npm install`. |
-| Kaspersky TLS interception breaking `npm` or Playwright | Low | Known cause, check it first if a network call fails. |
+| Risk                                                                              | Impact | Mitigation                                                                                                                                          |
+| --------------------------------------------------------------------------------- | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Set<number>` engine too slow for criterion 4 (30 gen/s, full 1080p soup at 8 px) | Med    | Measured in Task 6 with a soup benchmark. Fallback: reuse a typed-array neighbour count. The engine sits behind `step()`, so only one file changes. |
+| Space doing two things (tap = play, hold+drag = pan) feels wrong                  | Low    | Built in Task 7 and checked by hand at Checkpoint C. Fallback: Space = play only, pan with middle drag.                                             |
+| Gesture conflicts on touch (draw vs two-finger pan, page scroll/zoom)             | Med    | `touch-action: none` on the canvas; a stroke is cancelled if a second finger lands. Real-phone check at Checkpoint C.                               |
+| Fonts or theme flash before first paint under a strict CSP                        | Low    | `public/theme-init.js` as an external blocking script; fonts bundled by Vite. Checked in Task 13.                                                   |
+| Dependency versions < 2 weeks old                                                 | Low    | Versions listed with their publish dates in Task 0 for your approval before `npm install`.                                                          |
+| Kaspersky TLS interception breaking `npm` or Playwright                           | Low    | Known cause, check it first if a network call fails.                                                                                                |
 
 ## Open Questions
 
