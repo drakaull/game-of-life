@@ -8,6 +8,7 @@ describe('History', () => {
     expect(history.canGoForward).toBe(false)
     expect(history.back('now')).toBeUndefined()
     expect(history.forward('now')).toBeUndefined()
+    expect(history.canGoBack).toBe(false)
   })
 
   it('goes back to the recorded state, then forward again', () => {

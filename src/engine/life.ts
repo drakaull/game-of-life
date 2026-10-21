@@ -7,6 +7,7 @@ const SPAN = 2 ** 21
 export const inBounds = (x: number, y: number): boolean =>
   x >= MIN && x <= MAX && y >= MIN && y <= MAX
 
+// The caller must check inBounds first: out-of-range coordinates would alias another cell.
 export const pack = (x: number, y: number): number => (x - MIN) * SPAN + (y - MIN)
 
 export const unpack = (cell: number): [number, number] => [
