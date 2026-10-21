@@ -2,10 +2,20 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>Game of Life</title>
+    <!-- Mobile browser bar in the page background colour of each theme (--color-bg). -->
+    <meta name="theme-color" content="#f7f4ec" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1b1a17" media="(prefers-color-scheme: dark)" />
+    <!-- Before the first paint, so the page never flashes the wrong theme. -->
+    <script src="/theme-init.js"></script>
   </head>
   <body>
+    <canvas class="board" id="board"></canvas>
+    <header class="topbar panel">
+      <a class="back" href="https://leonard-fontaine.com/en">← Portfolio</a>
+      <h1 class="title">Game of Life</h1>
+    </header>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

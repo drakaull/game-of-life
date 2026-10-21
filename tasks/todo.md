@@ -32,30 +32,30 @@ is checked with `playwright-cli` in light + dark, desktop + ~390 px, Chrome + Fi
 
 ### Checkpoint A: Engine
 
-- [ ] All tests pass, coverage ≥ 90 % on `src/engine`
-- [ ] Review (`/code-review`), merge `feature/engine` → `develop` after Léonard's "yes"
+- [x] All tests pass, coverage ≥ 90 % on `src/engine`
+- [x] Review (`/code-review`), merge `feature/engine` → `develop` after Léonard's "yes"
 
 ## Phase 3: Board (`feature/board`)
 
-- [ ] **Task 3: Page skeleton, tokens, fonts, theme init**
+- [x] **Task 3: Page skeleton, tokens, fonts, theme init**
   - Acceptance: `tokens.css` with every colour, spacing, radius and motion token from the spec; the 3 Fontsource fonts imported; `public/theme-init.js` sets `data-theme` before paint; header with "← Portfolio"; full-screen canvas area.
   - Verify: playwright screenshots in both themes (forced via `localStorage.theme`) and at 390 px; no theme flash on reload.
   - Files: `index.html`, `public/theme-init.js`, `src/styles/tokens.css`, `src/styles/app.css`, `src/main.ts`
   - Scope: M
 
-- [ ] **Task 4: Camera, renderer and loop: a glider runs**
+- [x] **Task 4: Camera, renderer and loop: a glider runs**
   - Acceptance: camera tests pass (round-trip, zoom around a point, fit); canvas is sharp at `devicePixelRatio` 1 and 2; only visible cells drawn; grid lines at ≥ 8 px; temporary seeded glider runs at 10 gen/s, independent of frame rate; colours follow the theme.
   - Verify: `npm test -- src/view`; playwright screenshots in both themes.
   - Files: `src/view/camera.ts`, `src/view/camera.test.ts`, `src/view/render.ts`, `src/main.ts`
   - Scope: M
 
-- [ ] **Task 5: Draw and erase**
+- [x] **Task 5: Draw and erase**
   - Acceptance: mouse left button and one finger draw; first cell decides paint vs erase; tap toggles; no gaps when dragging fast (cells interpolated along the stroke); one stroke = one history entry; stroke cancelled when a second finger lands.
   - Verify: playwright: drag across empty cells → cells appear; drag starting on a live cell → erased.
   - Files: `src/input/pointer.ts`, `src/main.ts`
   - Scope: S
 
-- [ ] **Task 6: Zoom, pan, recenter, performance**
+- [x] **Task 6: Zoom, pan, recenter, performance**
   - Acceptance: wheel zooms around the pointer (2–64 px); Space+drag, middle drag, two-finger pan and pinch; recenter fits live cells; page never scrolls or zooms instead of the board; criterion 4 measured on a full-screen soup at 8 px.
   - Verify: playwright: zoom and pan screenshots; FPS / step time logged in the dev console during the benchmark (debug code removed afterwards).
   - Files: `src/input/pointer.ts`, `src/view/camera.ts`, `src/main.ts`

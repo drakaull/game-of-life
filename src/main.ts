@@ -1,2 +1,5 @@
-// Entry point: the game is wired here in later tasks.
-export {}
+import '@fontsource-variable/bricolage-grotesque'
+import '@fontsource-variable/google-sans'
+import '@fontsource-variable/jetbrains-mono'
+import './styles/tokens.css'
+import './styles/app.css'
