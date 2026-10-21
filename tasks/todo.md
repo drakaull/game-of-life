@@ -95,9 +95,9 @@ is checked with `playwright-cli` in light + dark, desktop + ~390 px, Chrome + Fi
 
 ### Checkpoint C: Controls
 
-- [ ] Spec success criteria 1–5 pass
-- [ ] Léonard tries it on a real phone (`npm run dev -- --host` on the local network)
-- [ ] Review, merge `feature/controls` → `develop` after "yes"
+- [x] Spec success criteria 1–5 pass
+- [x] Léonard tries it on a real phone (`npm run dev -- --host` on the local network)
+- [x] Review, merge `feature/controls` → `develop` after "yes"
 
 ## Phase 5: Languages, theme, accessibility (`feature/i18n-theme`)
 
