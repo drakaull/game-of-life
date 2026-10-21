@@ -24,7 +24,7 @@ is checked with `playwright-cli` in light + dark, desktop + ~390 px, Chrome + Fi
   - Files: `src/engine/life.ts`, `src/engine/life.test.ts`
   - Scope: S
 
-- [ ] **Task 2: Bounded history**
+- [x] **Task 2: Bounded history**
   - Acceptance: cap at 100; previous/next round-trip; new change clears the future; previous on empty history is a no-op.
   - Verify: `npm test -- src/engine/history.test.ts`; coverage ≥ 90 %.
   - Files: `src/engine/history.ts`, `src/engine/history.test.ts`
