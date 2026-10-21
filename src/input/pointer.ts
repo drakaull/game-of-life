@@ -57,6 +57,11 @@ export function attachPointer(canvas: HTMLCanvasElement, handlers: BoardHandlers
     if (event.code === 'Space') spaceHeld = false
     canvas.classList.toggle('can-pan', spaceHeld)
   })
+  // Leaving the window while holding Space never delivers its keyup.
+  addEventListener('blur', () => {
+    spaceHeld = false
+    canvas.classList.remove('can-pan')
+  })
   // Middle click would otherwise start the browser's autoscroll.
   canvas.addEventListener('mousedown', (event) => event.button === 1 && event.preventDefault())
 
