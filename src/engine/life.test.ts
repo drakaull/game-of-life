@@ -88,3 +88,68 @@ describe('step', () => {
     expect(points(blinker)).toEqual(before)
   })
 })
+
+describe('step against a naive reference', () => {
+  // Reference: the rules written as plainly as possible, checking every candidate cell.
+  function reference(cells: ReadonlySet<number>): Set<number> {
+    const alive = new Set([...cells].map((c) => unpack(c).join()))
+    const next = new Set<number>()
+    for (const cell of cells) {
+      const [cx, cy] = unpack(cell)
+      for (let x = cx - 1; x <= cx + 1; x++) {
+        for (let y = cy - 1; y <= cy + 1; y++) {
+          if (!inBounds(x, y)) continue
+          let n = 0
+          for (let dx = -1; dx <= 1; dx++)
+            for (let dy = -1; dy <= 1; dy++) if ((dx || dy) && alive.has(`${x + dx},${y + dy}`)) n++
+          if (n === 3 || (n === 2 && alive.has(`${x},${y}`))) next.add(pack(x, y))
+        }
+      }
+    }
+    return next
+  }
+
+  // Deterministic pseudo-random numbers, so a failure can be replayed.
+  function random(seed: number) {
+    return () => (seed = (seed * 1103515245 + 12345) % 2 ** 31) / 2 ** 31
+  }
+
+  it('matches on a dense random soup', () => {
+    const next = random(1)
+    let cells = new Set<number>()
+    for (let x = -20; x < 20; x++)
+      for (let y = -15; y < 15; y++) if (next() < 0.3) cells.add(pack(x, y))
+    for (let i = 0; i < 20; i++) {
+      expect(points(step(cells))).toEqual(points(reference(cells)))
+      cells = step(cells)
+    }
+  })
+
+  it('matches on small patterns spread far apart', () => {
+    const next = random(2)
+    let cells = new Set<number>()
+    for (let p = 0; p < 6; p++) {
+      const [ox, oy] = [
+        Math.floor(next() * 200_000) - 100_000,
+        Math.floor(next() * 200_000) - 100_000,
+      ]
+      for (let x = 0; x < 5; x++)
+        for (let y = 0; y < 5; y++) if (next() < 0.5) cells.add(pack(ox + x, oy + y))
+    }
+    for (let i = 0; i < 10; i++) {
+      expect(points(step(cells))).toEqual(points(reference(cells)))
+      cells = step(cells)
+    }
+  })
+
+  it('matches on a soup touching the corner of the board', () => {
+    const next = random(3)
+    let cells = new Set<number>()
+    for (let x = MAX - 9; x <= MAX; x++)
+      for (let y = MIN; y < MIN + 10; y++) if (next() < 0.4) cells.add(pack(x, y))
+    for (let i = 0; i < 10; i++) {
+      expect(points(step(cells))).toEqual(points(reference(cells)))
+      cells = step(cells)
+    }
+  })
+})
