@@ -87,7 +87,7 @@ is checked with `playwright-cli` in light + dark, desktop + ~390 px, Chrome + Fi
   - Files: `src/ui/tooltip.ts`, `src/ui/help.ts`, `index.html`, `src/styles/app.css`
   - Scope: M
 
-- [ ] **Task 10: Mobile layout**
+- [x] **Task 10: Mobile layout**
   - Acceptance: at ~390 px the bar shows icons only, speed in a small menu, targets ≥ 44 px, `env(safe-area-inset-bottom)` respected; nothing overflows horizontally.
   - Verify: playwright at 390 × 844 in both browsers and both themes.
   - Files: `src/styles/app.css`, `src/ui/controls.ts`, `index.html`
