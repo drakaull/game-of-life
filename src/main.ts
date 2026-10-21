@@ -20,9 +20,17 @@ interface Snapshot {
 const canvas = document.querySelector<HTMLCanvasElement>('#board')!
 const ctx = canvas.getContext('2d')!
 
-let cells = new Set<number>()
+// Visitors start on a paused glider: pressing play shows the game at once.
+const GLIDER: Cell[] = [
+  [1, 0],
+  [2, 1],
+  [0, 2],
+  [1, 2],
+  [2, 2],
+]
+let cells = new Set(GLIDER.map(([x, y]) => pack(x, y)))
 let generation = 0
-let camera = fit([], canvas.clientWidth, canvas.clientHeight)
+let camera = fit(GLIDER, canvas.clientWidth, canvas.clientHeight)
 let playing = false
 let speed = 4 // generations per second
 let dirty = true
