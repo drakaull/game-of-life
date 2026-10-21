@@ -26,7 +26,11 @@ let camera = fit([], canvas.clientWidth, canvas.clientHeight)
 let playing = false
 let speed = 10 // generations per second
 let dirty = true
+let limitReached = false
 const history = new History<Snapshot>()
+// Bounds history memory (~40 MB worst case) and keeps every frame responsive.
+const CELL_LIMIT = 50_000
+const RANDOM_DENSITY = 0.25
 
 const snapshot = (): Snapshot => ({ cells: Float64Array.from(cells), generation })
 function restore(state: Snapshot) {
@@ -35,17 +39,60 @@ function restore(state: Snapshot) {
   dirty = true
 }
 
-function advance() {
+/** Computes one generation; refuses (and pauses) if it would go past the cell limit. */
+function advance(): boolean {
+  const next = step(cells)
+  if (next.size > CELL_LIMIT) {
+    playing = false
+    limitReached = true
+    dirty = true
+    return false
+  }
   history.push(snapshot())
-  cells = step(cells)
+  cells = next
   generation++
+  dirty = true
+  return true
+}
+
+/** Swaps in a whole new board as one undoable change. */
+function replaceBoard(next: Set<number>) {
+  history.push(snapshot())
+  cells = next
+  generation = 0
   dirty = true
 }
 
 const actions = {
   togglePlay() {
     playing = !playing
+    limitReached = false
     dirty = true
+  },
+  setSpeed(generationsPerSecond: number) {
+    speed = generationsPerSecond
+    dirty = true
+  },
+  randomFill() {
+    limitReached = false
+    const [left, top] = screenToWorld(camera, 0, 0).map(Math.floor) as Cell
+    const [right, bottom] = screenToWorld(camera, canvas.clientWidth, canvas.clientHeight).map(
+      Math.ceil,
+    ) as Cell
+    // At low zoom the screen holds more cells than the limit allows: thin the soup out.
+    const density = Math.min(RANDOM_DENSITY, CELL_LIMIT / ((right - left) * (bottom - top)))
+    const next = new Set<number>()
+    for (let x = left; x < right; x++) {
+      for (let y = top; y < bottom; y++) {
+        if (inBounds(x, y) && Math.random() < density) next.add(pack(x, y))
+      }
+    }
+    replaceBoard(next)
+  },
+  clear() {
+    playing = false
+    limitReached = false
+    replaceBoard(new Set())
   },
   previous() {
     playing = false
@@ -125,13 +172,10 @@ function frame(now: number) {
   last = now
   // Time budget: a huge pattern slows the simulation down instead of freezing the page.
   const deadline = performance.now() + 8
-  while (pending >= 1 && performance.now() < deadline) {
-    advance()
-    pending--
-  }
+  while (pending >= 1 && performance.now() < deadline && advance()) pending--
   if (dirty) {
     render(ctx, camera, cells, canvas.clientWidth, canvas.clientHeight)
-    updateControls({ playing, canGoBack: history.canGoBack, generation })
+    updateControls({ playing, canGoBack: history.canGoBack, generation, speed, limitReached })
     dirty = false
   }
   requestAnimationFrame(frame)

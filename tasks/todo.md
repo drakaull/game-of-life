@@ -75,7 +75,7 @@ is checked with `playwright-cli` in light + dark, desktop + ~390 px, Chrome + Fi
   - Files: `src/ui/controls.ts`, `src/input/keyboard.ts`, `index.html`, `src/styles/app.css`, `src/main.ts`
   - Scope: M
 
-- [ ] **Task 8: Speed, random, clear, cell cap**
+- [x] **Task 8: Speed, random, clear, cell cap**
   - Acceptance: speed slider 1–60 (default 10); random fills the visible area at ~25 %; clear resets the counter; both undoable with `J`; above 50,000 cells the game pauses with a short message.
   - Verify: playwright: each control; a large random soup at minimum zoom triggers the cap message.
   - Files: `src/ui/controls.ts`, `index.html`, `src/main.ts`

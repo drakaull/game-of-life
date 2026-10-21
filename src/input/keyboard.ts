@@ -36,6 +36,8 @@ export function attachKeyboard(actions: KeyActions): void {
   addEventListener('keydown', (event) => {
     // Leave browser shortcuts (ctrl + 0, ctrl + plus…) alone.
     if (event.ctrlKey || event.metaKey || event.altKey) return
+    // A focused slider keeps its own arrow keys.
+    if (event.target instanceof HTMLInputElement) return
     if (event.code === 'Space') {
       // On a focused button, Space is the button's own activation key.
       if (event.target instanceof Element && event.target.closest('button, a')) return
