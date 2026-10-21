@@ -6,7 +6,7 @@ import './styles/app.css'
 import { History } from './engine/history.ts'
 import { inBounds, pack, step, unpack } from './engine/life.ts'
 import { attachPointer, type Cell } from './input/pointer.ts'
-import { fit, screenToWorld } from './view/camera.ts'
+import { fit, pan, screenToWorld, zoomAt } from './view/camera.ts'
 import { render } from './view/render.ts'
 
 interface Snapshot {
@@ -60,7 +60,22 @@ attachPointer(canvas, {
     stroke = undefined
     dirty = true
   },
+  pan(dx, dy) {
+    camera = pan(camera, dx, dy)
+    dirty = true
+  },
+  zoom(sx, sy, factor) {
+    camera = zoomAt(camera, sx, sy, camera.zoom * factor)
+    dirty = true
+  },
 })
+
+function recenter() {
+  camera = fit([...cells].map(unpack), canvas.clientWidth, canvas.clientHeight)
+  dirty = true
+}
+// shortcut: bare key listener until the keyboard module of Task 7 takes over.
+addEventListener('keydown', (event) => event.key === '0' && recenter())
 
 new ResizeObserver(() => {
   canvas.width = Math.round(canvas.clientWidth * devicePixelRatio)
@@ -80,7 +95,9 @@ function frame(now: number) {
   // Capped so a tab coming back from the background does not compute a burst of generations.
   pending = Math.min(pending + ((now - last) * speed) / 1000, 4)
   last = now
-  while (pending >= 1) {
+  // Time budget: a huge pattern slows the simulation down instead of freezing the page.
+  const deadline = performance.now() + 8
+  while (pending >= 1 && performance.now() < deadline) {
     cells = step(cells)
     generation++
     pending--

@@ -1,6 +1,10 @@
-// Pointer gestures on the board: one mouse button or one finger draws. A second finger landing
-// cancels the stroke (it becomes a pan / pinch in Task 6).
+// Pointer gestures on the board, without any mode button:
+// - left button or one finger draws;
+// - Space held + drag, or middle-button drag, pans;
+// - two fingers pan and pinch-zoom (a second finger cancels the stroke in progress);
+// - the wheel zooms around the pointer.
 export type Cell = [number, number]
+type Point = [number, number]
 
 /** Cells from `from` to `to`, ends included, each touching the previous one (Bresenham). */
 export function line([x0, y0]: Cell, [x1, y1]: Cell): Cell[] {
@@ -23,7 +27,7 @@ export function line([x0, y0]: Cell, [x1, y1]: Cell): Cell[] {
   return cells
 }
 
-export interface StrokeHandlers {
+export interface BoardHandlers {
   /** World cell under a point in canvas CSS pixels. */
   toCell(sx: number, sy: number): Cell
   start(cell: Cell): void
@@ -31,42 +35,94 @@ export interface StrokeHandlers {
   end(): void
   /** Undo the stroke in progress. */
   cancel(): void
+  pan(dx: number, dy: number): void
+  /** Multiply the zoom by `factor`, keeping the point (sx, sy) still. */
+  zoom(sx: number, sy: number, factor: number): void
 }
 
-export function attachPointer(canvas: HTMLCanvasElement, handlers: StrokeHandlers): void {
-  const down = new Set<number>()
-  let drawing: number | undefined
+const midpoint = ([ax, ay]: Point, [bx, by]: Point): Point => [(ax + bx) / 2, (ay + by) / 2]
+const distance = ([ax, ay]: Point, [bx, by]: Point) => Math.hypot(bx - ax, by - ay)
+
+export function attachPointer(canvas: HTMLCanvasElement, handlers: BoardHandlers): void {
+  const points = new Map<number, Point>()
+  let mode: 'draw' | 'pan' | 'pinch' | undefined
   let last: Cell = [0, 0]
+  let spaceHeld = false
+
+  addEventListener('keydown', (event) => {
+    if (event.code === 'Space') spaceHeld = true
+    canvas.classList.toggle('can-pan', spaceHeld)
+  })
+  addEventListener('keyup', (event) => {
+    if (event.code === 'Space') spaceHeld = false
+    canvas.classList.toggle('can-pan', spaceHeld)
+  })
+  // Middle click would otherwise start the browser's autoscroll.
+  canvas.addEventListener('mousedown', (event) => event.button === 1 && event.preventDefault())
 
   canvas.addEventListener('pointerdown', (event) => {
-    down.add(event.pointerId)
-    if (down.size > 1) {
-      if (drawing !== undefined) handlers.cancel()
-      drawing = undefined
+    points.set(event.pointerId, [event.offsetX, event.offsetY])
+    if (points.size === 2 && event.pointerType === 'touch') {
+      if (mode === 'draw') handlers.cancel()
+      mode = 'pinch'
       return
     }
-    if (event.button !== 0) return
+    if (points.size > 1) return
     canvas.setPointerCapture(event.pointerId)
-    drawing = event.pointerId
-    last = handlers.toCell(event.offsetX, event.offsetY)
-    handlers.start(last)
+    if (event.button === 1 || (event.button === 0 && spaceHeld)) {
+      mode = 'pan'
+      canvas.classList.add('panning')
+    } else if (event.button === 0) {
+      mode = 'draw'
+      last = handlers.toCell(event.offsetX, event.offsetY)
+      handlers.start(last)
+    }
   })
 
   canvas.addEventListener('pointermove', (event) => {
-    if (event.pointerId !== drawing) return
-    const cell = handlers.toCell(event.offsetX, event.offsetY)
-    // A fast drag skips cells between two events: fill the gap.
-    for (const between of line(last, cell).slice(1)) handlers.move(between)
-    last = cell
+    const before = points.get(event.pointerId)
+    if (!before) return
+    const now: Point = [event.offsetX, event.offsetY]
+    if (mode === 'draw') {
+      const cell = handlers.toCell(...now)
+      // A fast drag skips cells between two events: fill the gap.
+      for (const between of line(last, cell).slice(1)) handlers.move(between)
+      last = cell
+    } else if (mode === 'pan') {
+      handlers.pan(now[0] - before[0], now[1] - before[1])
+    } else if (mode === 'pinch') {
+      const other = [...points].find(([id]) => id !== event.pointerId)?.[1]
+      if (other) {
+        const [from, to] = [midpoint(before, other), midpoint(now, other)]
+        handlers.pan(to[0] - from[0], to[1] - from[1])
+        handlers.zoom(...to, distance(now, other) / Math.max(1, distance(before, other)))
+      }
+    }
+    points.set(event.pointerId, now)
   })
 
   const release = (event: PointerEvent) => {
-    down.delete(event.pointerId)
-    if (event.pointerId !== drawing) return
-    drawing = undefined
-    if (event.type === 'pointercancel') handlers.cancel()
-    else handlers.end()
+    if (!points.delete(event.pointerId)) return
+    if (mode === 'draw') {
+      if (event.type === 'pointercancel') handlers.cancel()
+      else handlers.end()
+    }
+    // After a pinch, the finger left on the screen does nothing until it is lifted too.
+    if (mode !== 'pinch' || points.size === 0) mode = undefined
+    canvas.classList.remove('panning')
   }
   canvas.addEventListener('pointerup', release)
   canvas.addEventListener('pointercancel', release)
+
+  canvas.addEventListener(
+    'wheel',
+    (event) => {
+      // Also stops the browser's own page zoom on a trackpad pinch (ctrl + wheel).
+      event.preventDefault()
+      const pixels =
+        event.deltaMode === WheelEvent.DOM_DELTA_LINE ? event.deltaY * 16 : event.deltaY
+      handlers.zoom(event.offsetX, event.offsetY, Math.exp(-pixels * 0.002))
+    },
+    { passive: false },
+  )
 }
