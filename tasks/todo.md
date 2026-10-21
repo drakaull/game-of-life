@@ -18,7 +18,7 @@ is checked with `playwright-cli` in light + dark, desktop + ~390 px, Chrome + Fi
 
 ## Phase 2: Engine (`feature/engine`, TDD)
 
-- [ ] **Task 1: `step()` and coordinate packing**
+- [x] **Task 1: `step()` and coordinate packing**
   - Acceptance: tests from the spec pass (empty, lone cell, block, blinker, glider shift, birth/survival, pack round-trip at ±2²⁰, cells beyond bounds dropped).
   - Verify: `npm test -- src/engine/life.test.ts`; coverage ≥ 90 %.
   - Files: `src/engine/life.ts`, `src/engine/life.test.ts`
