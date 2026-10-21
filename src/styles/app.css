@@ -74,6 +74,320 @@ body {
   line-height: 1.2;
 }
 
+.controls {
+  position: fixed;
+  bottom: max(var(--space-4), env(safe-area-inset-bottom));
+  left: 50%;
+  translate: -50% 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1);
+}
+
+.icon-button {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text);
+  cursor: pointer;
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+
+.icon-button svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: currentColor;
+}
+
+.icon-button:hover {
+  background: var(--color-border);
+}
+
+.icon-button[aria-disabled='true'] {
+  color: var(--color-text-muted);
+  background: transparent;
+  cursor: default;
+  opacity: 0.5;
+}
+
+.icon-button.primary {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+}
+
+.icon-button.primary:hover {
+  background: color-mix(in srgb, var(--color-accent) 85%, var(--color-text));
+}
+
+.icon-play,
+.playing .icon-pause {
+  display: block;
+}
+
+.icon-pause,
+.playing .icon-play {
+  display: none;
+}
+
+.counter {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0 var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+}
+
+.counter-label {
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Fixed width so the bar does not jitter while the number grows. */
+#generation {
+  min-width: 6ch;
+  font-variant-numeric: tabular-nums;
+}
+
+.speed {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-3);
+  border-inline: 1px solid var(--color-border);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.speed input {
+  width: 7rem;
+  accent-color: var(--color-accent);
+}
+
+#speed-value {
+  min-width: 4ch;
+  font-variant-numeric: tabular-nums;
+}
+
+.notice {
+  position: fixed;
+  bottom: calc(max(var(--space-4), env(safe-area-inset-bottom)) + 3.75rem);
+  left: 50%;
+  translate: -50% 0;
+  margin: 0;
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--text-sm);
+  text-align: center;
+}
+
+kbd {
+  display: inline-block;
+  min-width: 1.5em;
+  padding: 0 var(--space-1);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  line-height: 1.5;
+  text-align: center;
+}
+
+.tooltip {
+  position: absolute;
+  bottom: calc(100% + var(--space-3));
+  left: 50%;
+  translate: -50% var(--space-1);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  background: var(--color-text);
+  color: var(--color-bg);
+  font-size: var(--text-xs);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity var(--duration-fast) var(--ease-out),
+    translate var(--duration-fast) var(--ease-out);
+}
+
+.tooltip kbd {
+  border-color: transparent;
+  background: color-mix(in srgb, var(--color-bg) 18%, transparent);
+  color: inherit;
+}
+
+/* Touch screens have no real hover: a tap would leave the tooltip stuck. */
+@media (hover: hover) {
+  .icon-button:hover .tooltip {
+    opacity: 1;
+    translate: -50% 0;
+  }
+}
+
+.icon-button:focus-visible .tooltip {
+  opacity: 1;
+  translate: -50% 0;
+}
+
+.help {
+  width: min(30rem, 100vw - 2rem);
+  max-height: calc(100dvh - 2rem);
+  overflow: auto;
+  padding: var(--space-5);
+  color: var(--color-text);
+  box-shadow: 0 1rem 3rem rgb(0 0 0 / 15%);
+  opacity: 0;
+  translate: 0 var(--space-2);
+  transition:
+    opacity var(--duration-base) var(--ease-out),
+    translate var(--duration-base) var(--ease-out),
+    display var(--duration-base) allow-discrete,
+    overlay var(--duration-base) allow-discrete;
+}
+
+.help:popover-open {
+  opacity: 1;
+  translate: 0 0;
+}
+
+@starting-style {
+  .help:popover-open {
+    opacity: 0;
+    translate: 0 var(--space-2);
+  }
+}
+
+.help::backdrop {
+  background: rgb(0 0 0 / 20%);
+}
+
+.help-title {
+  margin: 0 0 var(--space-3);
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+}
+
+.help p {
+  margin: 0 0 var(--space-4);
+  font-size: var(--text-sm);
+}
+
+.help-list {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-2) var(--space-4);
+  margin: 0 0 var(--space-5);
+  font-size: var(--text-sm);
+}
+
+.help-list dt {
+  color: var(--color-text-muted);
+}
+
+.help-list dd {
+  margin: 0;
+}
+
+/* The help describes the input the visitor actually has. */
+.for-touch {
+  display: none;
+}
+
+@media (pointer: coarse) {
+  .for-touch {
+    display: grid;
+  }
+
+  .for-pointer {
+    display: none;
+  }
+}
+
+.help-close {
+  display: block;
+  margin-left: auto;
+  padding: var(--space-2) var(--space-4);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  font: inherit;
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+
+.row-break {
+  display: none;
+}
+
+/* Narrow screens: the bar spans the width on two rows, the speed slider takes the free space. */
+@media (max-width: 45rem) {
+  .controls {
+    left: max(var(--space-3), env(safe-area-inset-left));
+    right: max(var(--space-3), env(safe-area-inset-right));
+    translate: none;
+    max-width: 26rem;
+    margin-inline: auto;
+    flex-wrap: wrap;
+    row-gap: var(--space-1);
+  }
+
+  .row-break {
+    display: block;
+    flex-basis: 100%;
+  }
+
+  .counter {
+    flex: 1;
+    justify-content: flex-end;
+  }
+
+  .speed {
+    flex: 1 1 0;
+    min-width: 0;
+    padding-left: var(--space-2);
+    border-inline: 0;
+  }
+
+  .speed input {
+    flex: 1;
+    width: auto;
+    min-width: 3rem;
+  }
+
+  .notice {
+    bottom: calc(max(var(--space-4), env(safe-area-inset-bottom)) + 7rem);
+    width: calc(100% - 2 * var(--space-3));
+  }
+}
+
+/* Readable by screen readers, invisible on screen. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 @media (prefers-reduced-motion: reduce) {
   * {
     transition: none !important;

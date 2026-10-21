@@ -63,31 +63,31 @@ is checked with `playwright-cli` in light + dark, desktop + ~390 px, Chrome + Fi
 
 ### Checkpoint B: Board
 
-- [ ] Glider runs, drawing/zoom/pan work with mouse and in mobile emulation
-- [ ] Performance figure reported to Léonard
-- [ ] Review, merge `feature/board` → `develop` after "yes"
+- [x] Glider runs, drawing/zoom/pan work with mouse and in mobile emulation
+- [x] Performance figure reported to Léonard
+- [x] Review, merge `feature/board` → `develop` after "yes"
 
 ## Phase 4: Controls (`feature/controls`)
 
-- [ ] **Task 7: Timeline bar and shortcuts**
+- [x] **Task 7: Timeline bar and shortcuts**
   - Acceptance: buttons previous / play-pause / next and the generation counter in the bottom bar; `J`, `K`, `L`, short Space press, `+`, `-`, arrows, `0`; previous disabled with empty history; next replays the future, otherwise steps; temporary glider seed removed.
   - Verify: playwright: keyboard-only session runs, rewinds and steps; counter matches.
   - Files: `src/ui/controls.ts`, `src/input/keyboard.ts`, `index.html`, `src/styles/app.css`, `src/main.ts`
   - Scope: M
 
-- [ ] **Task 8: Speed, random, clear, cell cap**
+- [x] **Task 8: Speed, random, clear, cell cap**
   - Acceptance: speed slider 1–60 (default 10); random fills the visible area at ~25 %; clear resets the counter; both undoable with `J`; above 50,000 cells the game pauses with a short message.
   - Verify: playwright: each control; a large random soup at minimum zoom triggers the cap message.
   - Files: `src/ui/controls.ts`, `index.html`, `src/main.ts`
   - Scope: S
 
-- [ ] **Task 9: Tooltips and help panel**
+- [x] **Task 9: Tooltips and help panel**
   - Acceptance: tooltip on hover **and** focus shows the shortcut (`aria-describedby`, `aria-keyshortcuts`); "?" button and `?` key open a `popover` help panel; Escape closes it; shortcuts on fine pointers, gestures on touch (`pointer: coarse`).
   - Verify: playwright: hover and Tab screenshots; help panel in desktop and touch emulation.
   - Files: `src/ui/tooltip.ts`, `src/ui/help.ts`, `index.html`, `src/styles/app.css`
   - Scope: M
 
-- [ ] **Task 10: Mobile layout**
+- [x] **Task 10: Mobile layout**
   - Acceptance: at ~390 px the bar shows icons only, speed in a small menu, targets ≥ 44 px, `env(safe-area-inset-bottom)` respected; nothing overflows horizontally.
   - Verify: playwright at 390 × 844 in both browsers and both themes.
   - Files: `src/styles/app.css`, `src/ui/controls.ts`, `index.html`
@@ -95,9 +95,9 @@ is checked with `playwright-cli` in light + dark, desktop + ~390 px, Chrome + Fi
 
 ### Checkpoint C: Controls
 
-- [ ] Spec success criteria 1–5 pass
-- [ ] Léonard tries it on a real phone (`npm run dev -- --host` on the local network)
-- [ ] Review, merge `feature/controls` → `develop` after "yes"
+- [x] Spec success criteria 1–5 pass
+- [x] Léonard tries it on a real phone (`npm run dev -- --host` on the local network)
+- [x] Review, merge `feature/controls` → `develop` after "yes"
 
 ## Phase 5: Languages, theme, accessibility (`feature/i18n-theme`)
 
