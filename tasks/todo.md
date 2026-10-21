@@ -81,7 +81,7 @@ is checked with `playwright-cli` in light + dark, desktop + ~390 px, Chrome + Fi
   - Files: `src/ui/controls.ts`, `index.html`, `src/main.ts`
   - Scope: S
 
-- [ ] **Task 9: Tooltips and help panel**
+- [x] **Task 9: Tooltips and help panel**
   - Acceptance: tooltip on hover **and** focus shows the shortcut (`aria-describedby`, `aria-keyshortcuts`); "?" button and `?` key open a `popover` help panel; Escape closes it; shortcuts on fine pointers, gestures on touch (`pointer: coarse`).
   - Verify: playwright: hover and Tab screenshots; help panel in desktop and touch emulation.
   - Files: `src/ui/tooltip.ts`, `src/ui/help.ts`, `index.html`, `src/styles/app.css`

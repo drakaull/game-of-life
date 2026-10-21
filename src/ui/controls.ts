@@ -6,6 +6,7 @@ export interface ControlActions {
   setSpeed(generationsPerSecond: number): void
   randomFill(): void
   clear(): void
+  recenter(): void
 }
 
 export interface ControlState {
@@ -30,6 +31,7 @@ export function attachControls(actions: ControlActions): (state: ControlState) =
   byId('next').addEventListener('click', actions.next)
   byId('random').addEventListener('click', actions.randomFill)
   byId('clear').addEventListener('click', actions.clear)
+  byId('recenter').addEventListener('click', actions.recenter)
   speed.addEventListener('input', () => actions.setSpeed(speed.valueAsNumber))
 
   return (state) => {

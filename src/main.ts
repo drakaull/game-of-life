@@ -118,6 +118,7 @@ const actions = {
     camera = fit([...cells].map(unpack), canvas.clientWidth, canvas.clientHeight)
     dirty = true
   },
+  toggleHelp: () => document.getElementById('help')!.togglePopover(),
 }
 
 // Drawing: the first cell touched decides whether the whole stroke paints or erases.
