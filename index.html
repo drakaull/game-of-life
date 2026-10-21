@@ -16,6 +16,38 @@
       <a class="back" href="https://leonard-fontaine.com/en">← Portfolio</a>
       <h1 class="title">Game of Life</h1>
     </header>
+    <div class="controls panel" role="group" aria-label="Simulation">
+      <button
+        class="icon-button"
+        id="previous"
+        type="button"
+        aria-label="Previous"
+        aria-keyshortcuts="J"
+      >
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 4h2v12H5zM16 4v12L8 10z" /></svg>
+      </button>
+      <button
+        class="icon-button primary"
+        id="play"
+        type="button"
+        aria-label="Play"
+        aria-keyshortcuts="K"
+      >
+        <svg class="icon-play" viewBox="0 0 20 20" aria-hidden="true">
+          <path d="M6 4l10 6-10 6z" />
+        </svg>
+        <svg class="icon-pause" viewBox="0 0 20 20" aria-hidden="true">
+          <path d="M5 4h3.5v12H5zM11.5 4H15v12h-3.5z" />
+        </svg>
+      </button>
+      <button class="icon-button" id="next" type="button" aria-label="Next" aria-keyshortcuts="L">
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M13 4h2v12h-2zM4 4v12l8-6z" /></svg>
+      </button>
+      <p class="counter">
+        <span class="counter-label">Gen</span>
+        <output id="generation" aria-label="Generation">0</output>
+      </p>
+    </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

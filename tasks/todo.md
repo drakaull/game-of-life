@@ -63,13 +63,13 @@ is checked with `playwright-cli` in light + dark, desktop + ~390 px, Chrome + Fi
 
 ### Checkpoint B: Board
 
-- [ ] Glider runs, drawing/zoom/pan work with mouse and in mobile emulation
-- [ ] Performance figure reported to Léonard
-- [ ] Review, merge `feature/board` → `develop` after "yes"
+- [x] Glider runs, drawing/zoom/pan work with mouse and in mobile emulation
+- [x] Performance figure reported to Léonard
+- [x] Review, merge `feature/board` → `develop` after "yes"
 
 ## Phase 4: Controls (`feature/controls`)
 
-- [ ] **Task 7: Timeline bar and shortcuts**
+- [x] **Task 7: Timeline bar and shortcuts**
   - Acceptance: buttons previous / play-pause / next and the generation counter in the bottom bar; `J`, `K`, `L`, short Space press, `+`, `-`, arrows, `0`; previous disabled with empty history; next replays the future, otherwise steps; temporary glider seed removed.
   - Verify: playwright: keyboard-only session runs, rewinds and steps; counter matches.
   - Files: `src/ui/controls.ts`, `src/input/keyboard.ts`, `index.html`, `src/styles/app.css`, `src/main.ts`
