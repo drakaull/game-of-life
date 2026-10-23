@@ -174,9 +174,9 @@ export function step(cells: ReadonlySet<number>): Set<number> {
 - `localStorage` holds only `theme`, the same key as the portfolio.
 - Headers to set in Caddy (portfolio repo), recorded in `docs/deployment-checklist.md`:
   `Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self';
-font-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'`,
-  plus `Referrer-Policy: no-referrer`, `X-Content-Type-Options: nosniff` and long cache
-  lifetimes for hashed assets.
+font-src 'self'; img-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'`,
+  plus `Referrer-Policy: no-referrer`, `X-Content-Type-Options: nosniff`, the portfolio's HSTS,
+  `X-Frame-Options` and `Permissions-Policy`, and long cache lifetimes for hashed assets.
 
 ## Testing Strategy
 
