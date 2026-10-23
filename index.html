@@ -11,23 +11,34 @@
     <script src="/theme-init.js"></script>
   </head>
   <body>
+    <!-- Texts are in English here; src/ui/language.ts swaps every data-i18n* element. -->
     <canvas class="board" id="board"></canvas>
     <header class="topbar panel">
       <a class="back" href="https://leonard-fontaine.com/en">← Portfolio</a>
-      <h1 class="title">Game of Life</h1>
+      <h1 class="title" data-i18n="title">Game of Life</h1>
     </header>
+    <div class="corner panel">
+      <button class="lang-button" id="lang-button" type="button" popovertarget="lang-menu">
+        <span id="lang-flag"></span>
+        <span class="lang-code" id="lang-code">EN</span>
+        <svg class="chevron" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" /></svg>
+      </button>
+      <ul class="lang-menu panel" id="lang-menu" popover></ul>
+    </div>
     <!-- Tooltips are plain spans shown by CSS on hover and keyboard focus. -->
-    <div class="controls panel" role="group" aria-label="Simulation">
+    <div class="controls panel" role="group" data-i18n-label="controls.label">
       <button
         class="icon-button"
         id="previous"
         type="button"
-        aria-label="Previous"
+        data-i18n-label="controls.previous"
         aria-keyshortcuts="J"
         aria-describedby="tip-previous"
       >
         <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 4h2v12H5zM16 4v12L8 10z" /></svg>
-        <span class="tooltip" id="tip-previous" role="tooltip">Previous <kbd>J</kbd></span>
+        <span class="tooltip" id="tip-previous" role="tooltip">
+          <span data-i18n="controls.previous">Previous</span> <kbd>J</kbd>
+        </span>
       </button>
       <button
         class="icon-button primary"
@@ -43,57 +54,54 @@
         <svg class="icon-pause" viewBox="0 0 20 20" aria-hidden="true">
           <path d="M5 4h3.5v12H5zM11.5 4H15v12h-3.5z" />
         </svg>
-        <span class="tooltip" id="tip-play" role="tooltip">Play / pause <kbd>K</kbd></span>
+        <span class="tooltip" id="tip-play" role="tooltip">
+          <span data-i18n="controls.playPause">Play / pause</span> <kbd>K</kbd>
+        </span>
       </button>
       <button
         class="icon-button"
         id="next"
         type="button"
-        aria-label="Next"
+        data-i18n-label="controls.next"
         aria-keyshortcuts="L"
         aria-describedby="tip-next"
       >
         <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M13 4h2v12h-2zM4 4v12l8-6z" /></svg>
-        <span class="tooltip" id="tip-next" role="tooltip">Next <kbd>L</kbd></span>
+        <span class="tooltip" id="tip-next" role="tooltip">
+          <span data-i18n="controls.next">Next</span> <kbd>L</kbd>
+        </span>
       </button>
       <p class="counter">
-        <span class="counter-label">Gen</span>
-        <output id="generation" aria-label="Generation">0</output>
+        <span class="counter-label" data-i18n="controls.generationShort">Gen</span>
+        <output id="generation" data-i18n-label="controls.generation">0</output>
       </p>
       <!-- On narrow screens the bar wraps here: timeline above, tools below. -->
       <span class="row-break" aria-hidden="true"></span>
       <label class="speed">
-        <span class="visually-hidden">Speed</span>
-        <input
-          id="speed"
-          type="range"
-          min="0"
-          max="100"
-          value="41"
-          aria-valuetext="4 generations per second"
-        />
+        <span class="visually-hidden" data-i18n="controls.speed">Speed</span>
+        <input id="speed" type="range" min="0" max="100" value="41" />
         <output id="speed-value" for="speed">4/s</output>
       </label>
-      <button class="icon-button" id="random" type="button" aria-label="Random fill">
+      <button class="icon-button" id="random" type="button" data-i18n-label="controls.random">
         <svg viewBox="0 0 20 20" aria-hidden="true">
           <path
             d="M4 3h12a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zm2.5 2a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm7 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM10 8.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM6.5 12a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm7 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"
             fill-rule="evenodd"
           />
         </svg>
-        <span class="tooltip" aria-hidden="true">Random fill</span>
+        <span class="tooltip" aria-hidden="true" data-i18n="controls.random">Random fill</span>
       </button>
-      <button class="icon-button" id="clear" type="button" aria-label="Clear">
+      <button class="icon-button" id="clear" type="button" data-i18n-label="controls.clear">
         <svg viewBox="0 0 20 20" aria-hidden="true">
           <path d="M7 2h6v2h4v2H3V4h4zM4.5 7h11l-1 11h-9zM8 9v7h1.5V9zm2.5 0v7H12V9z" />
         </svg>
-        <span class="tooltip" aria-hidden="true">Clear</span>
+        <span class="tooltip" aria-hidden="true" data-i18n="controls.clear">Clear</span>
       </button>
       <button
         class="icon-button"
         id="recenter"
         type="button"
-        aria-label="Recenter"
+        data-i18n-label="controls.recenter"
         aria-keyshortcuts="0"
         aria-describedby="tip-recenter"
       >
@@ -102,14 +110,16 @@
             d="M9 2h2v3.1A5 5 0 0 1 14.9 9H18v2h-3.1A5 5 0 0 1 11 14.9V18H9v-3.1A5 5 0 0 1 5.1 11H2V9h3.1A5 5 0 0 1 9 5.1zm1 5a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"
           />
         </svg>
-        <span class="tooltip" id="tip-recenter" role="tooltip">Recenter <kbd>0</kbd></span>
+        <span class="tooltip" id="tip-recenter" role="tooltip">
+          <span data-i18n="controls.recenter">Recenter</span> <kbd>0</kbd>
+        </span>
       </button>
       <button
         class="icon-button"
         id="help-button"
         type="button"
         popovertarget="help"
-        aria-label="How to play"
+        data-i18n-label="controls.help"
         aria-keyshortcuts="?"
         aria-describedby="tip-help"
       >
@@ -118,43 +128,46 @@
             d="M10 2a8 8 0 1 1 0 16 8 8 0 0 1 0-16zm0 11.5a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4zM10 5a3 3 0 0 0-3 3h2a1 1 0 1 1 1.6.8c-.9.6-1.6 1.3-1.6 2.7h2c0-.6.3-.9 1-1.4A3 3 0 0 0 10 5z"
           />
         </svg>
-        <span class="tooltip" id="tip-help" role="tooltip">How to play <kbd>?</kbd></span>
+        <span class="tooltip" id="tip-help" role="tooltip">
+          <span data-i18n="controls.help">How to play</span> <kbd>?</kbd>
+        </span>
       </button>
     </div>
-    <p class="notice panel" id="notice" role="status" hidden>
-      Over 50,000 live cells: paused to keep the page responsive.
-    </p>
+    <p class="notice panel" id="notice" role="status" hidden></p>
     <div class="help panel" id="help" popover aria-labelledby="help-title">
-      <h2 class="help-title" id="help-title">How to play</h2>
-      <p>
-        Draw some cells, then press play. At each generation, a cell with exactly 3 neighbours is
-        born, a cell with 2 or 3 neighbours survives, and every other cell dies.
-      </p>
+      <h2 class="help-title" id="help-title" data-i18n="controls.help">How to play</h2>
+      <p data-i18n="help.intro"></p>
       <dl class="help-list for-pointer">
-        <dt>Click, drag</dt>
-        <dd>Draw (start on a live cell to erase)</dd>
-        <dt><kbd>Space</kbd> + drag, middle button</dt>
-        <dd>Move around</dd>
-        <dt>Wheel, <kbd>+</kbd> <kbd>−</kbd></dt>
-        <dd>Zoom</dd>
-        <dt>Arrows</dt>
-        <dd>Move around</dd>
-        <dt><kbd>K</kbd>, <kbd>Space</kbd></dt>
-        <dd>Play / pause</dd>
+        <dt data-i18n="help.draw"></dt>
+        <dd data-i18n="help.drawWhat"></dd>
+        <dt data-i18n-html="help.pan"></dt>
+        <dd data-i18n="help.move"></dd>
+        <dt data-i18n-html="help.zoom"></dt>
+        <dd data-i18n="help.zoomWhat"></dd>
+        <dt data-i18n="help.arrows"></dt>
+        <dd data-i18n="help.move"></dd>
+        <dt data-i18n-html="help.playKeys"></dt>
+        <dd data-i18n="controls.playPause"></dd>
         <dt><kbd>J</kbd> <kbd>L</kbd></dt>
-        <dd>Previous / next (also undoes drawing)</dd>
+        <dd data-i18n="help.stepWhat"></dd>
         <dt><kbd>0</kbd></dt>
-        <dd>Recenter</dd>
+        <dd data-i18n="controls.recenter"></dd>
       </dl>
       <dl class="help-list for-touch">
-        <dt>Tap, drag</dt>
-        <dd>Draw (start on a live cell to erase)</dd>
-        <dt>Two fingers</dt>
-        <dd>Move around and zoom</dd>
-        <dt>Previous</dt>
-        <dd>Goes back in time, and also undoes drawing</dd>
+        <dt data-i18n="help.touchDraw"></dt>
+        <dd data-i18n="help.drawWhat"></dd>
+        <dt data-i18n="help.fingers"></dt>
+        <dd data-i18n="help.fingersWhat"></dd>
+        <dt data-i18n="controls.previous"></dt>
+        <dd data-i18n="help.previousWhat"></dd>
       </dl>
-      <button class="help-close" type="button" popovertarget="help" popovertargetaction="hide">
+      <button
+        class="help-close"
+        type="button"
+        popovertarget="help"
+        popovertargetaction="hide"
+        data-i18n="help.close"
+      >
         Got it
       </button>
     </div>

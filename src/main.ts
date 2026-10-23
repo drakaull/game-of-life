@@ -7,7 +7,9 @@ import { History } from './engine/history.ts'
 import { inBounds, pack, step, unpack } from './engine/life.ts'
 import { attachKeyboard } from './input/keyboard.ts'
 import { attachPointer, type Cell } from './input/pointer.ts'
+import { detectLang } from './i18n/lang.ts'
 import { attachControls } from './ui/controls.ts'
+import { applyLanguage, attachLanguageSwitch } from './ui/language.ts'
 import { fit, pan, screenToWorld, zoomAt } from './view/camera.ts'
 import { render } from './view/render.ts'
 
@@ -159,7 +161,9 @@ attachPointer(canvas, {
   zoom: (sx, sy, factor) => actions.zoom(factor, sx, sy),
 })
 attachKeyboard(actions)
-const updateControls = attachControls(actions)
+const updateControls = attachControls(actions, CELL_LIMIT)
+attachLanguageSwitch(() => (dirty = true))
+applyLanguage(detectLang(location.search, navigator.languages))
 
 new ResizeObserver(() => {
   canvas.width = Math.round(canvas.clientWidth * devicePixelRatio)

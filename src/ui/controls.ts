@@ -1,4 +1,6 @@
 // The bottom control bar: buttons call the game's actions, update() mirrors the game's state.
+import { currentLang, t } from '../i18n/lang.ts'
+
 export interface ControlActions {
   togglePlay(): void
   previous(): void
@@ -24,7 +26,10 @@ const byId = <T extends HTMLElement>(id: string) => document.getElementById(id) 
 const MAX_SPEED = 30
 const speedAt = (position: number) => Math.round(MAX_SPEED ** (position / 100))
 
-export function attachControls(actions: ControlActions): (state: ControlState) => void {
+export function attachControls(
+  actions: ControlActions,
+  cellLimit: number,
+): (state: ControlState) => void {
   const play = byId<HTMLButtonElement>('play')
   const previous = byId<HTMLButtonElement>('previous')
   const generation = byId<HTMLOutputElement>('generation')
@@ -41,13 +46,16 @@ export function attachControls(actions: ControlActions): (state: ControlState) =
 
   return (state) => {
     play.classList.toggle('playing', state.playing)
-    play.setAttribute('aria-label', state.playing ? 'Pause' : 'Play')
+    play.setAttribute('aria-label', t(state.playing ? 'controls.pause' : 'controls.play'))
     // aria-disabled, not disabled: a disabled button would drop keyboard focus to the page.
     previous.setAttribute('aria-disabled', String(!state.canGoBack))
     generation.value = String(state.generation)
     speedValue.value = `${state.speed}/s`
-    const unit = state.speed === 1 ? 'generation' : 'generations'
-    speed.setAttribute('aria-valuetext', `${state.speed} ${unit} per second`)
+    const unit = state.speed === 1 ? 'controls.speedOne' : 'controls.speedMany'
+    speed.setAttribute('aria-valuetext', t(unit, { n: state.speed }))
     notice.hidden = !state.limitReached
+    // 50,000 / 50 000 / 50.000 depending on the language.
+    const limit = cellLimit.toLocaleString(currentLang())
+    notice.textContent = t('notice.limit', { limit })
   }
 }
