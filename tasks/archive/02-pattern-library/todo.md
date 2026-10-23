@@ -54,7 +54,7 @@ is checked with `playwright-cli` in light + dark, desktop + ~390 px, Chrome + Fi
 
 ### Final checkpoint: Release v1.1.0
 
-- [ ] All 7 spec success criteria met; Léonard tries it on his phone
-- [ ] Review, merge `feature/pattern-library` → `develop` after "yes"
-- [ ] Release: `develop` → `main` ("Release v1.1.0"), tag `v1.1.0`, push, each after "yes"
-- [ ] Plan archived to `tasks/archive/02-pattern-library/`; redeploy from the portfolio repo
+- [x] All 7 spec success criteria met; Léonard tries it on his phone
+- [x] Review, merge `feature/pattern-library` → `develop` after "yes"
+- [x] Release: `develop` → `main` ("Release v1.1.0"), tag `v1.1.0`, push, each after "yes"
+- [x] Plan archived to `tasks/archive/02-pattern-library/`; redeploy from the portfolio repo
