@@ -115,12 +115,12 @@ is checked with `playwright-cli` in light + dark, desktop + ~390 px, Chrome + Fi
 
 ### Checkpoint D: Languages and theme
 
-- [ ] Spec success criteria 6–7 pass
-- [ ] Review, merge `feature/i18n-theme` → `develop` after "yes"
+- [x] Spec success criteria 6–7 pass
+- [x] Review, merge `feature/i18n-theme` → `develop` after "yes"
 
 ## Phase 6: Release prep (`feature/release-prep`)
 
-- [ ] **Task 13: CSP check and deployment checklist**
+- [x] **Task 13: CSP check and deployment checklist**
   - Acceptance: `vite preview` serves `dist/` with the spec's CSP headers; no CSP violation in the console; zero requests to other origins; `docs/deployment-checklist.md` lists the headers, cache rules, the subdomain `life.leonard-fontaine.com`, and the steps on the portfolio side (DNS, Caddy block, GitHub Website field, admin visibility).
   - Verify: playwright console + network log on the preview, in Chrome and Firefox.
   - Files: `vite.config.ts`, `docs/deployment-checklist.md`
