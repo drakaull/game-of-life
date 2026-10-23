@@ -10,6 +10,7 @@ import { attachPointer, type Cell } from './input/pointer.ts'
 import { detectLang } from './i18n/lang.ts'
 import { attachControls } from './ui/controls.ts'
 import { applyLanguage, attachLanguageSwitch } from './ui/language.ts'
+import { attachLibrary } from './ui/library.ts'
 import { attachThemeToggle } from './ui/theme.ts'
 import { fit, pan, screenToWorld, zoomAt } from './view/camera.ts'
 import { render } from './view/render.ts'
@@ -130,6 +131,7 @@ const actions = {
     dirty = true
   },
   toggleHelp: () => document.getElementById('help')!.togglePopover(),
+  toggleLibrary: () => document.getElementById('library')!.togglePopover(),
 }
 
 // Drawing: the first cell touched decides whether the whole stroke paints or erases.
@@ -163,6 +165,8 @@ attachPointer(canvas, {
 })
 attachKeyboard(actions)
 const updateControls = attachControls(actions, CELL_LIMIT)
+// shortcut: choosing a pattern only closes the panel for now; placing comes in the next task.
+attachLibrary(() => {})
 attachLanguageSwitch(() => (dirty = true))
 applyLanguage(detectLang(location.search, navigator.languages))
 

@@ -27,7 +27,7 @@ is checked with `playwright-cli` in light + dark, desktop + ~390 px, Chrome + Fi
 
 ## Phase 2: Interface
 
-- [ ] **Task 3: Library panel**
+- [x] **Task 3: Library panel**
   - Acceptance: "Patterns" button (tooltip with `P`) and `P` open a popover with 4 family
     sections and 17 cards (SVG preview + name) in FR / EN / NL; two cards per row at 390 px;
     on narrow screens the button ends the bar's first row; help panel lists `P` / the button.

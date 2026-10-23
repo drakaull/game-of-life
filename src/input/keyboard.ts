@@ -8,6 +8,7 @@ export interface KeyActions {
   pan(dx: number, dy: number): void
   recenter(): void
   toggleHelp(): void
+  toggleLibrary(): void
 }
 
 const PAN_STEP = 80 // CSS pixels per arrow press
@@ -25,6 +26,7 @@ export function attachKeyboard(actions: KeyActions): void {
     '-': () => actions.zoom(1 / ZOOM_STEP),
     '0': actions.recenter,
     '?': actions.toggleHelp,
+    p: actions.toggleLibrary,
     ArrowLeft: () => actions.pan(PAN_STEP, 0),
     ArrowRight: () => actions.pan(-PAN_STEP, 0),
     ArrowUp: () => actions.pan(0, PAN_STEP),
