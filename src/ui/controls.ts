@@ -15,6 +15,7 @@ export interface ControlState {
   playing: boolean
   canGoBack: boolean
   generation: number
+  population: number
   speed: number
   limitReached: boolean
 }
@@ -36,6 +37,7 @@ export function attachControls(
   const speed = byId<HTMLInputElement>('speed')
   const speedValue = byId<HTMLOutputElement>('speed-value')
   const notice = byId('notice')
+  const board = byId('board')
   play.addEventListener('click', actions.togglePlay)
   previous.addEventListener('click', actions.previous)
   byId('next').addEventListener('click', actions.next)
@@ -57,5 +59,11 @@ export function attachControls(
     // 50,000 / 50 000 / 50.000 depending on the language.
     const limit = cellLimit.toLocaleString(currentLang())
     notice.textContent = t('notice.limit', { limit })
+    // Describe the board to screen readers only while paused: a label changing 30 times a
+    // second would be noise.
+    if (!state.playing) {
+      const cells = state.population.toLocaleString(currentLang())
+      board.setAttribute('aria-label', t('board.label', { generation: state.generation, cells }))
+    }
   }
 }

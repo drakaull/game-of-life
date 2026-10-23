@@ -3,6 +3,8 @@ import type { TranslationKey } from './en.ts'
 export const nl: Record<TranslationKey, string> = {
   title: 'Spel des levens',
   'language.label': 'Taal:',
+  'theme.dark': 'Donkere modus',
+  'board.label': 'Speelveld, generatie {generation}, levende cellen: {cells}',
   'controls.label': 'Simulatie',
   'controls.previous': 'Vorige',
   'controls.play': 'Afspelen',

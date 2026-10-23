@@ -3,6 +3,8 @@
 export const en = {
   title: 'Game of Life',
   'language.label': 'Language:',
+  'theme.dark': 'Dark mode',
+  'board.label': 'Game board, generation {generation}, live cells: {cells}',
   'controls.label': 'Simulation',
   'controls.previous': 'Previous',
   'controls.play': 'Play',

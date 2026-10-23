@@ -45,11 +45,13 @@ body {
 }
 
 .topbar {
+  /* Same height as the corner on the right, so the two blocks line up. */
+  min-height: 3.375rem;
   position: fixed;
   top: max(var(--space-3), env(safe-area-inset-top));
   left: max(var(--space-3), env(safe-area-inset-left));
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: var(--space-4);
   padding: var(--space-2) var(--space-4);
 }
@@ -135,6 +137,35 @@ body {
   border-radius: 2px;
   /* Keeps the white stripes visible on the cream background. */
   box-shadow: 0 0 0 1px var(--color-border);
+}
+
+/* Outlined icons, as on the portfolio; the moon shows in dark mode, the sun in light mode. */
+.theme-button svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.theme-button:hover {
+  background: transparent;
+  color: var(--color-accent);
+}
+
+.icon-moon,
+.theme-button[aria-pressed='true'] .icon-sun {
+  display: none;
+}
+
+.theme-button[aria-pressed='true'] .icon-moon {
+  display: block;
+}
+
+/* Theme change: the old and new pages cross-fade (theme.ts). */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--duration-base);
 }
 
 /* A popover, positioned under the fixed corner by hand (it sits in the top layer). */

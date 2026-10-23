@@ -107,7 +107,7 @@ is checked with `playwright-cli` in light + dark, desktop + ~390 px, Chrome + Fi
   - Files: `src/i18n/en.ts`, `src/i18n/fr.ts`, `src/i18n/nl.ts`, `src/i18n/lang.ts`, `src/i18n/lang.test.ts`, `src/ui/language.ts`
   - Scope: M
 
-- [ ] **Task 12: Theme toggle and accessibility polish**
+- [x] **Task 12: Theme toggle and accessibility polish**
   - Acceptance: theme toggle like the portfolio; canvas `role="img"` label (generation + cells) updated when paused; AA contrast verified for text, controls and cells in both themes; `prefers-contrast: more` and `prefers-reduced-motion` honoured.
   - Verify: playwright with emulated media (`dark`, `reduced-motion`, `contrast: more`); contrast ratios computed and listed.
   - Files: `src/ui/theme.ts`, `src/styles/tokens.css`, `src/styles/app.css`, `src/main.ts`

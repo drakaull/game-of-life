@@ -3,6 +3,8 @@ import type { TranslationKey } from './en.ts'
 export const fr: Record<TranslationKey, string> = {
   title: 'Jeu de la vie',
   'language.label': 'Langue :',
+  'theme.dark': 'Mode sombre',
+  'board.label': 'Plateau de jeu, génération {generation}, cellules vivantes : {cells}',
   'controls.label': 'Simulation',
   'controls.previous': 'Précédent',
   'controls.play': 'Lecture',
