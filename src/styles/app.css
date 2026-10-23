@@ -1,0 +1,545 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  height: 100dvh;
+  overflow: hidden;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* The board fills the screen; the header and controls float above it. */
+.board {
+  position: fixed;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  /* Gestures belong to the board, not to page scroll or browser zoom. */
+  touch-action: none;
+}
+
+.board.can-pan {
+  cursor: grab;
+}
+
+.board.panning {
+  cursor: grabbing;
+}
+
+.panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.topbar {
+  /* Same height as the corner on the right, so the two blocks line up. */
+  min-height: 3.375rem;
+  position: fixed;
+  top: max(var(--space-3), env(safe-area-inset-top));
+  left: max(var(--space-3), env(safe-area-inset-left));
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-2) var(--space-4);
+}
+
+.back {
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.back:hover {
+  color: var(--color-text);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+/* Top-right corner: language (and theme, Task 12). Styles follow the portfolio's switcher. */
+.corner {
+  position: fixed;
+  top: max(var(--space-3), env(safe-area-inset-top));
+  right: max(var(--space-3), env(safe-area-inset-right));
+  display: flex;
+  gap: var(--space-1);
+  padding: var(--space-1);
+}
+
+.lang-button {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: 2.75rem;
+  padding: 0 var(--space-3);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text);
+  cursor: pointer;
+  transition:
+    border-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+
+.lang-button:hover,
+.lang-button:has(+ .lang-menu:popover-open) {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.lang-code {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 500;
+}
+
+.chevron {
+  width: 0.625rem;
+  height: 0.375rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: rotate var(--duration-fast) var(--ease-out);
+}
+
+.lang-button:has(+ .lang-menu:popover-open) .chevron {
+  rotate: 180deg;
+}
+
+.flag {
+  display: block;
+  flex: none;
+  width: 1.25rem;
+  height: 0.875rem;
+  border-radius: 2px;
+  /* Keeps the white stripes visible on the cream background. */
+  box-shadow: 0 0 0 1px var(--color-border);
+}
+
+/* Outlined icons, as on the portfolio; the moon shows in dark mode, the sun in light mode. */
+.theme-button svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.theme-button:hover {
+  background: transparent;
+  color: var(--color-accent);
+}
+
+.icon-moon,
+.theme-button[aria-pressed='true'] .icon-sun {
+  display: none;
+}
+
+.theme-button[aria-pressed='true'] .icon-moon {
+  display: block;
+}
+
+/* Theme change: the old and new pages cross-fade (theme.ts). */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--duration-base);
+}
+
+/* A popover, positioned under the fixed corner by hand (it sits in the top layer). */
+.lang-menu {
+  position: fixed;
+  inset: auto;
+  top: calc(max(var(--space-3), env(safe-area-inset-top)) + 3.5rem);
+  right: max(var(--space-3), env(safe-area-inset-right));
+  min-width: 10rem;
+  margin: 0;
+  padding: var(--space-1);
+  color: var(--color-text);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 8%);
+  list-style: none;
+}
+
+.lang-menu a {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  font-size: var(--text-sm);
+  text-decoration: none;
+}
+
+.lang-menu a:hover {
+  background: var(--color-bg);
+  color: var(--color-accent);
+}
+
+/* The current language: a terracotta tick after the name. */
+.lang-menu a[aria-current='true']::after {
+  content: '✓';
+  margin-left: auto;
+  color: var(--color-accent);
+}
+
+.controls {
+  position: fixed;
+  bottom: max(var(--space-4), env(safe-area-inset-bottom));
+  left: 50%;
+  translate: -50% 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1);
+}
+
+.icon-button {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text);
+  cursor: pointer;
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+
+.icon-button svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: currentColor;
+}
+
+.icon-button:hover {
+  background: var(--color-border);
+}
+
+.icon-button[aria-disabled='true'] {
+  color: var(--color-text-muted);
+  background: transparent;
+  cursor: default;
+  opacity: 0.5;
+}
+
+.icon-button.primary {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+}
+
+.icon-button.primary:hover {
+  background: color-mix(in srgb, var(--color-accent) 85%, var(--color-text));
+}
+
+.icon-play,
+.playing .icon-pause {
+  display: block;
+}
+
+.icon-pause,
+.playing .icon-play {
+  display: none;
+}
+
+.counter {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0 var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+}
+
+.counter-label {
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Fixed width so the bar does not jitter while the number grows. */
+#generation {
+  min-width: 6ch;
+  font-variant-numeric: tabular-nums;
+}
+
+.speed {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-3);
+  border-inline: 1px solid var(--color-border);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.speed input {
+  width: 7rem;
+  accent-color: var(--color-accent);
+}
+
+#speed-value {
+  min-width: 4ch;
+  font-variant-numeric: tabular-nums;
+}
+
+.notice {
+  position: fixed;
+  bottom: calc(max(var(--space-4), env(safe-area-inset-bottom)) + 3.75rem);
+  left: 50%;
+  translate: -50% 0;
+  margin: 0;
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--text-sm);
+  text-align: center;
+}
+
+kbd {
+  display: inline-block;
+  min-width: 1.5em;
+  padding: 0 var(--space-1);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  line-height: 1.5;
+  text-align: center;
+}
+
+.tooltip {
+  position: absolute;
+  bottom: calc(100% + var(--space-3));
+  left: 50%;
+  translate: -50% var(--space-1);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  background: var(--color-text);
+  color: var(--color-bg);
+  font-size: var(--text-xs);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity var(--duration-fast) var(--ease-out),
+    translate var(--duration-fast) var(--ease-out);
+}
+
+.tooltip kbd {
+  border-color: transparent;
+  background: color-mix(in srgb, var(--color-bg) 18%, transparent);
+  color: inherit;
+}
+
+/* Touch screens have no real hover: a tap would leave the tooltip stuck. */
+@media (hover: hover) {
+  .icon-button:hover .tooltip {
+    opacity: 1;
+    translate: -50% 0;
+  }
+}
+
+.icon-button:focus-visible .tooltip {
+  opacity: 1;
+  translate: -50% 0;
+}
+
+.help {
+  width: min(30rem, 100vw - 2rem);
+  max-height: calc(100dvh - 2rem);
+  overflow: auto;
+  padding: var(--space-5);
+  color: var(--color-text);
+  box-shadow: 0 1rem 3rem rgb(0 0 0 / 15%);
+  opacity: 0;
+  translate: 0 var(--space-2);
+  transition:
+    opacity var(--duration-base) var(--ease-out),
+    translate var(--duration-base) var(--ease-out),
+    display var(--duration-base) allow-discrete,
+    overlay var(--duration-base) allow-discrete;
+}
+
+.help:popover-open {
+  opacity: 1;
+  translate: 0 0;
+}
+
+@starting-style {
+  .help:popover-open {
+    opacity: 0;
+    translate: 0 var(--space-2);
+  }
+}
+
+.help::backdrop {
+  background: rgb(0 0 0 / 20%);
+}
+
+.help-title {
+  margin: 0 0 var(--space-3);
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+}
+
+.help p {
+  margin: 0 0 var(--space-4);
+  font-size: var(--text-sm);
+}
+
+.help-list {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-2) var(--space-4);
+  margin: 0 0 var(--space-5);
+  font-size: var(--text-sm);
+}
+
+.help-list dt {
+  color: var(--color-text-muted);
+}
+
+.help-list dd {
+  margin: 0;
+}
+
+/* The help describes the input the visitor actually has. */
+.for-touch {
+  display: none;
+}
+
+@media (pointer: coarse) {
+  .for-touch {
+    display: grid;
+  }
+
+  .for-pointer {
+    display: none;
+  }
+}
+
+.help-close {
+  display: block;
+  margin-left: auto;
+  padding: var(--space-2) var(--space-4);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  font: inherit;
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+
+.row-break {
+  display: none;
+}
+
+/* Narrow screens: the bar spans the width on two rows, the speed slider takes the free space. */
+@media (max-width: 45rem) {
+  .controls {
+    left: max(var(--space-3), env(safe-area-inset-left));
+    right: max(var(--space-3), env(safe-area-inset-right));
+    translate: none;
+    max-width: 26rem;
+    margin-inline: auto;
+    flex-wrap: wrap;
+    row-gap: var(--space-1);
+  }
+
+  .row-break {
+    display: block;
+    flex-basis: 100%;
+  }
+
+  /* The link sits above the title, so the header leaves room for the corner. */
+  .topbar {
+    flex-direction: column;
+    gap: 0;
+    padding: var(--space-1) var(--space-3);
+  }
+
+  .back {
+    font-size: var(--text-xs);
+    /* 24 px tall: the WCAG minimum target size, even at this small text size. */
+    line-height: 1.5rem;
+  }
+
+  /* Flag only, like the portfolio on narrow screens (the button keeps its full label). */
+  .lang-code,
+  .chevron {
+    display: none;
+  }
+
+  .counter {
+    flex: 1;
+    justify-content: flex-end;
+  }
+
+  .speed {
+    flex: 1 1 0;
+    min-width: 0;
+    padding-left: var(--space-2);
+    border-inline: 0;
+  }
+
+  .speed input {
+    flex: 1;
+    width: auto;
+    min-width: 3rem;
+  }
+
+  .notice {
+    bottom: calc(max(var(--space-4), env(safe-area-inset-bottom)) + 7rem);
+    width: calc(100% - 2 * var(--space-3));
+  }
+}
+
+/* Readable by screen readers, invisible on screen. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}

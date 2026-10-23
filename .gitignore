@@ -4,6 +4,9 @@ dist/
 coverage/
 *.log
 
+# Local browser-testing logs (playwright-cli)
+.playwright-cli/
+
 # OS / editors
 .DS_Store
 Thumbs.db
