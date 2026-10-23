@@ -1,6 +1,6 @@
 # Implementation Plan: Pattern library (v1.1)
 
-Spec: [`specs/02-pattern-library.md`](../specs/02-pattern-library.md) (approved). Detailed tasks:
+Spec: [`specs/02-pattern-library.md`](../../../specs/02-pattern-library.md) (approved). Detailed tasks:
 [`tasks/todo.md`](todo.md).
 
 ## Overview
