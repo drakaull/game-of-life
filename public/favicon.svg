@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+  <!-- A glider in the portfolio's terracotta on its cream paper. -->
+  <rect width="16" height="16" rx="3" fill="#f7f4ec" />
+  <g fill="#9b4527">
+    <rect x="6.25" y="2.25" width="3.5" height="3.5" rx="0.5" />
+    <rect x="10.25" y="6.25" width="3.5" height="3.5" rx="0.5" />
+    <rect x="2.25" y="10.25" width="3.5" height="3.5" rx="0.5" />
+    <rect x="6.25" y="10.25" width="3.5" height="3.5" rx="0.5" />
+    <rect x="10.25" y="10.25" width="3.5" height="3.5" rx="0.5" />
+  </g>
+</svg>

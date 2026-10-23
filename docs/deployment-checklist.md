@@ -9,7 +9,8 @@ in a session opened on that repository. This file lists what that work must guar
 
 - [ ] On `main`, at a release tag: `npm ci && npm run build`.
 - [ ] `npm test`, `npm run lint`, `npm run format:check` pass on the same commit.
-- [ ] `dist/` contains `index.html`, `theme-init.js` and `assets/` (hashed JS, CSS and fonts).
+- [ ] `dist/` contains `index.html`, `theme-init.js`, `favicon.svg` and `assets/` (hashed JS,
+      CSS and fonts).
       Nothing else needs to be served.
 
 ## 2. DNS
