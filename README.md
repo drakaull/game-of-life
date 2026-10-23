@@ -1,7 +1,8 @@
 # Game of Life
 
 Conway's Game of Life on an infinite board, in the browser. Draw cells with the mouse or a finger,
-press play, step back and forth through time, zoom and pan freely.
+or drop one of 17 famous patterns, press play, step back and forth through time, zoom and pan
+freely.
 
 **Play it at [life.leonard-fontaine.com](https://life.leonard-fontaine.com)**: a small showcase
 project from [leonard-fontaine.com](https://leonard-fontaine.com).
@@ -21,6 +22,10 @@ project from [leonard-fontaine.com](https://leonard-fontaine.com).
   50,000-cell limit.
 - **Drawing by gestures**, no mode button: the first cell touched decides whether a stroke paints
   or erases.
+- **Pattern library**: 17 famous patterns in four families (spaceships, oscillators, guns and
+  methuselahs, still lifes), from the glider to the Gosper glider gun. A translucent preview
+  follows the mouse or the finger until the pattern is placed. Each pattern is stored as RLE and
+  proven by tests against the engine: periods, speeds and lifespans.
 - **Timeline**: play, pause, step forward and back through the last 100 states (stepping back also
   undoes drawing), adjustable speed from 1 to 30 generations per second.
 - Random fill, clear, recenter, and a help panel that shows shortcuts on a computer and gestures on
@@ -30,14 +35,15 @@ project from [leonard-fontaine.com](https://leonard-fontaine.com).
 - **Private by design**: no tracker, no analytics, no cookie, no third-party request. Fonts are
   self-hosted and the page runs under a strict Content Security Policy.
 
-| Action          | Mouse and keyboard                           | Touch screen |
-| --------------- | -------------------------------------------- | ------------ |
-| Draw, erase     | Click, drag                                  | Tap, drag    |
-| Move around     | <kbd>Space</kbd> + drag, middle drag, arrows | Two fingers  |
-| Zoom            | Wheel, <kbd>+</kbd> <kbd>−</kbd>             | Pinch        |
-| Play / pause    | <kbd>K</kbd>, <kbd>Space</kbd>               | Play button  |
-| Previous / next | <kbd>J</kbd> / <kbd>L</kbd>                  | Buttons      |
-| Recenter, help  | <kbd>0</kbd>, <kbd>?</kbd>                   | Buttons      |
+| Action          | Mouse and keyboard                           | Touch screen                |
+| --------------- | -------------------------------------------- | --------------------------- |
+| Draw, erase     | Click, drag                                  | Tap, drag                   |
+| Move around     | <kbd>Space</kbd> + drag, middle drag, arrows | Two fingers                 |
+| Zoom            | Wheel, <kbd>+</kbd> <kbd>−</kbd>             | Pinch                       |
+| Play / pause    | <kbd>K</kbd>, <kbd>Space</kbd>               | Play button                 |
+| Previous / next | <kbd>J</kbd> / <kbd>L</kbd>                  | Buttons                     |
+| Patterns        | <kbd>P</kbd>, then click to place            | Button, then slide a finger |
+| Recenter, help  | <kbd>0</kbd>, <kbd>?</kbd>                   | Buttons                     |
 
 ## Run it locally
 

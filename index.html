@@ -100,6 +100,22 @@
         <input id="speed" type="range" min="0" max="100" value="41" />
         <output id="speed-value" for="speed">4/s</output>
       </label>
+      <button
+        class="icon-button"
+        id="patterns-button"
+        type="button"
+        popovertarget="library"
+        data-i18n-label="controls.patterns"
+        aria-keyshortcuts="P"
+        aria-describedby="tip-patterns"
+      >
+        <svg viewBox="0 0 20 20" aria-hidden="true">
+          <path d="M8 2h4v4H8zM13 7h4v4h-4zM3 12h4v4H3zM8 12h4v4H8zM13 12h4v4h-4z" />
+        </svg>
+        <span class="tooltip" id="tip-patterns" role="tooltip">
+          <span data-i18n="controls.patterns">Patterns</span> <kbd>P</kbd>
+        </span>
+      </button>
       <button class="icon-button" id="random" type="button" data-i18n-label="controls.random">
         <svg viewBox="0 0 20 20" aria-hidden="true">
           <path
@@ -152,6 +168,13 @@
       </button>
     </div>
     <p class="notice panel" id="notice" role="status" hidden></p>
+    <div class="notice placing panel" id="placing" role="status" hidden>
+      <span class="for-pointer" data-i18n="placing.hintPointer"></span>
+      <span class="for-touch" data-i18n="placing.hintTouch"></span>
+      <button class="placing-cancel" id="cancel-placing" type="button" data-i18n="placing.cancel">
+        Cancel
+      </button>
+    </div>
     <div class="help panel" id="help" popover aria-labelledby="help-title">
       <h2 class="help-title" id="help-title" data-i18n="controls.help">How to play</h2>
       <p data-i18n="help.intro"></p>
@@ -170,6 +193,8 @@
         <dd data-i18n="help.stepWhat"></dd>
         <dt><kbd>0</kbd></dt>
         <dd data-i18n="controls.recenter"></dd>
+        <dt><kbd>P</kbd></dt>
+        <dd data-i18n="help.patternsPointer"></dd>
       </dl>
       <dl class="help-list for-touch">
         <dt data-i18n="help.touchDraw"></dt>
@@ -178,9 +203,12 @@
         <dd data-i18n="help.fingersWhat"></dd>
         <dt data-i18n="controls.previous"></dt>
         <dd data-i18n="help.previousWhat"></dd>
+        <dt data-i18n="controls.patterns"></dt>
+        <dd data-i18n="help.patternsTouch"></dd>
       </dl>
       <button
         class="help-close"
+        autofocus
         type="button"
         popovertarget="help"
         popovertargetaction="hide"
@@ -188,6 +216,10 @@
       >
         Got it
       </button>
+    </div>
+    <div class="help library panel" id="library" popover aria-labelledby="library-title">
+      <h2 class="help-title" id="library-title" data-i18n="controls.patterns">Patterns</h2>
+      <div id="library-list"></div>
     </div>
     <script type="module" src="/src/main.ts"></script>
   </body>

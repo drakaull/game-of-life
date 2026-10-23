@@ -9,6 +9,7 @@ export interface ControlActions {
   randomFill(): void
   clear(): void
   recenter(): void
+  cancelPlacing(): void
 }
 
 export interface ControlState {
@@ -18,6 +19,7 @@ export interface ControlState {
   population: number
   speed: number
   limitReached: boolean
+  placing: boolean
 }
 
 const byId = <T extends HTMLElement>(id: string) => document.getElementById(id) as T
@@ -36,6 +38,7 @@ export function attachControls(
   const generation = byId<HTMLOutputElement>('generation')
   const speed = byId<HTMLInputElement>('speed')
   const speedValue = byId<HTMLOutputElement>('speed-value')
+  const placingChip = byId('placing')
   const notice = byId('notice')
   const board = byId('board')
   play.addEventListener('click', actions.togglePlay)
@@ -44,6 +47,7 @@ export function attachControls(
   byId('random').addEventListener('click', actions.randomFill)
   byId('clear').addEventListener('click', actions.clear)
   byId('recenter').addEventListener('click', actions.recenter)
+  byId('cancel-placing').addEventListener('click', actions.cancelPlacing)
   speed.addEventListener('input', () => actions.setSpeed(speedAt(speed.valueAsNumber)))
 
   return (state) => {
@@ -56,6 +60,7 @@ export function attachControls(
     const unit = state.speed === 1 ? 'controls.speedOne' : 'controls.speedMany'
     speed.setAttribute('aria-valuetext', t(unit, { n: state.speed }))
     notice.hidden = !state.limitReached
+    placingChip.hidden = !state.placing
     // 50,000 / 50 000 / 50.000 depending on the language.
     const limit = cellLimit.toLocaleString(currentLang())
     notice.textContent = t('notice.limit', { limit })
