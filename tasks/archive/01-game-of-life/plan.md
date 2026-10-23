@@ -1,6 +1,6 @@
 # Implementation Plan: Game of Life v1
 
-Spec: [`specs/01-game-of-life.md`](../specs/01-game-of-life.md) (approved). Detailed tasks:
+Spec: [`specs/01-game-of-life.md`](../../../specs/01-game-of-life.md) (approved). Detailed tasks:
 [`tasks/todo.md`](todo.md).
 
 ## Overview
