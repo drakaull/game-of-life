@@ -45,7 +45,7 @@ is checked with `playwright-cli` in light + dark, desktop + ~390 px, Chrome + Fi
   - Files: `src/input/pointer.ts`, `src/view/render.ts`, `src/main.ts`, `src/ui/library.ts`
   - Scope: M
 
-- [ ] **Task 5: Placing on touch**
+- [x] **Task 5: Placing on touch**
   - Acceptance: the ghost appears under the finger, follows it and lands on lift; a pinch places
     nothing; a "Cancel" chip above the bar ends placing mode.
   - Verify: emulated touch events in both browsers; real-phone check at the final checkpoint.

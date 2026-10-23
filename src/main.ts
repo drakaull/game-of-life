@@ -197,6 +197,7 @@ attachKeyboard(actions)
 const updateControls = attachControls(actions, CELL_LIMIT)
 attachLibrary((id, fromKeyboard) => {
   placing = { pattern: patternCells(id) }
+  dirty = true
   // No pointer to aim with: drop it in the middle of the screen at once.
   if (fromKeyboard) placeAt(canvas.clientWidth / 2, canvas.clientHeight / 2)
 })
@@ -207,7 +208,7 @@ function draw() {
   const ghost = placing?.at ? centred(placing.pattern, ...cellAt(...placing.at)) : []
   render(ctx, camera, cells, canvas.clientWidth, canvas.clientHeight, ghost)
   const state = { playing, canGoBack: history.canGoBack, generation, speed, limitReached }
-  updateControls({ ...state, population: cells.size })
+  updateControls({ ...state, population: cells.size, placing: placing !== undefined })
   dirty = false
 }
 attachThemeToggle(draw)
