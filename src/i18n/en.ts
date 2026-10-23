@@ -1,0 +1,42 @@
+// Source of truth for translation keys: fr.ts and nl.ts must define every key below.
+// Keys used in index.html (data-i18n*) are checked against this list by lang.test.ts.
+export const en = {
+  title: 'Game of Life',
+  'language.label': 'Language:',
+  'theme.dark': 'Dark mode',
+  'board.label': 'Game board, generation {generation}, live cells: {cells}',
+  'controls.label': 'Simulation',
+  'controls.previous': 'Previous',
+  'controls.play': 'Play',
+  'controls.pause': 'Pause',
+  'controls.playPause': 'Play / pause',
+  'controls.next': 'Next',
+  'controls.generation': 'Generation',
+  'controls.generationShort': 'Gen',
+  'controls.speed': 'Speed',
+  'controls.speedOne': '{n} generation per second',
+  'controls.speedMany': '{n} generations per second',
+  'controls.random': 'Random fill',
+  'controls.clear': 'Clear',
+  'controls.recenter': 'Recenter',
+  'controls.help': 'How to play',
+  'notice.limit': 'Over {limit} live cells: paused to keep the page responsive.',
+  'help.intro':
+    'Draw some cells, then press play. At each generation, a cell with exactly 3 neighbours is born, a cell with 2 or 3 neighbours survives, and every other cell dies.',
+  'help.draw': 'Click, drag',
+  'help.drawWhat': 'Draw (start on a live cell to erase)',
+  'help.pan': '<kbd>Space</kbd> + drag, middle button',
+  'help.move': 'Move around',
+  'help.zoom': 'Wheel, <kbd>+</kbd> <kbd>−</kbd>',
+  'help.zoomWhat': 'Zoom',
+  'help.arrows': 'Arrows',
+  'help.playKeys': '<kbd>K</kbd>, <kbd>Space</kbd>',
+  'help.stepWhat': 'Previous / next (also undoes drawing)',
+  'help.touchDraw': 'Tap, drag',
+  'help.fingers': 'Two fingers',
+  'help.fingersWhat': 'Move around and zoom',
+  'help.previousWhat': 'Goes back in time, and also undoes drawing',
+  'help.close': 'Got it',
+}
+
+export type TranslationKey = keyof typeof en

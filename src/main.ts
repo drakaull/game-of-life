@@ -7,7 +7,10 @@ import { History } from './engine/history.ts'
 import { inBounds, pack, step, unpack } from './engine/life.ts'
 import { attachKeyboard } from './input/keyboard.ts'
 import { attachPointer, type Cell } from './input/pointer.ts'
+import { detectLang } from './i18n/lang.ts'
 import { attachControls } from './ui/controls.ts'
+import { applyLanguage, attachLanguageSwitch } from './ui/language.ts'
+import { attachThemeToggle } from './ui/theme.ts'
 import { fit, pan, screenToWorld, zoomAt } from './view/camera.ts'
 import { render } from './view/render.ts'
 
@@ -159,7 +162,17 @@ attachPointer(canvas, {
   zoom: (sx, sy, factor) => actions.zoom(factor, sx, sy),
 })
 attachKeyboard(actions)
-const updateControls = attachControls(actions)
+const updateControls = attachControls(actions, CELL_LIMIT)
+attachLanguageSwitch(() => (dirty = true))
+applyLanguage(detectLang(location.search, navigator.languages))
+
+function draw() {
+  render(ctx, camera, cells, canvas.clientWidth, canvas.clientHeight)
+  const state = { playing, canGoBack: history.canGoBack, generation, speed, limitReached }
+  updateControls({ ...state, population: cells.size })
+  dirty = false
+}
+attachThemeToggle(draw)
 
 new ResizeObserver(() => {
   canvas.width = Math.round(canvas.clientWidth * devicePixelRatio)
@@ -182,11 +195,7 @@ function frame(now: number) {
   // Time budget: a huge pattern slows the simulation down instead of freezing the page.
   const deadline = performance.now() + 8
   while (pending >= 1 && performance.now() < deadline && advance()) pending--
-  if (dirty) {
-    render(ctx, camera, cells, canvas.clientWidth, canvas.clientHeight)
-    updateControls({ playing, canGoBack: history.canGoBack, generation, speed, limitReached })
-    dirty = false
-  }
+  if (dirty) draw()
   requestAnimationFrame(frame)
 }
 requestAnimationFrame(frame)

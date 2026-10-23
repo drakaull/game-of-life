@@ -101,13 +101,13 @@ is checked with `playwright-cli` in light + dark, desktop + ~390 px, Chrome + Fi
 
 ## Phase 5: Languages, theme, accessibility (`feature/i18n-theme`)
 
-- [ ] **Task 11: Three languages and switcher**
+- [x] **Task 11: Three languages and switcher**
   - Acceptance: `en.ts`, `fr.ts`, `nl.ts` typed against `en.ts` (missing key fails the build); `lang.ts` tests pass (`?lang` beats the browser, `nl-BE` → `nl`, unknown → `en`); `<html lang>` and `<title>` follow the language; switcher with the portfolio's flags updates `?lang=` via `replaceState`; "← Portfolio" points to `/<lang>`. NL texts shown to Léonard for review.
   - Verify: `npm test -- src/i18n`; playwright screenshots in the 3 languages, switcher open and closed.
   - Files: `src/i18n/en.ts`, `src/i18n/fr.ts`, `src/i18n/nl.ts`, `src/i18n/lang.ts`, `src/i18n/lang.test.ts`, `src/ui/language.ts`
   - Scope: M
 
-- [ ] **Task 12: Theme toggle and accessibility polish**
+- [x] **Task 12: Theme toggle and accessibility polish**
   - Acceptance: theme toggle like the portfolio; canvas `role="img"` label (generation + cells) updated when paused; AA contrast verified for text, controls and cells in both themes; `prefers-contrast: more` and `prefers-reduced-motion` honoured.
   - Verify: playwright with emulated media (`dark`, `reduced-motion`, `contrast: more`); contrast ratios computed and listed.
   - Files: `src/ui/theme.ts`, `src/styles/tokens.css`, `src/styles/app.css`, `src/main.ts`
