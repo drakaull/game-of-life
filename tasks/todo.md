@@ -37,7 +37,7 @@ is checked with `playwright-cli` in light + dark, desktop + ~390 px, Chrome + Fi
     `src/input/keyboard.ts`
   - Scope: M
 
-- [ ] **Task 4: Placing on desktop and by keyboard**
+- [x] **Task 4: Placing on desktop and by keyboard**
   - Acceptance: a chosen card shows a ghost that follows the mouse; click places it (one history
     entry, cell limit respected); Escape / right click cancel; pan and zoom still work while
     aiming; choosing a card by keyboard places it at the screen centre.

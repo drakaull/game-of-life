@@ -47,6 +47,18 @@ export function patternCells(id: PatternId): [number, number][] {
   return cells
 }
 
+/** The pattern's cells moved so that the pattern is centred on the cell (x, y). */
+export function centred(
+  pattern: readonly [number, number][],
+  x: number,
+  y: number,
+): [number, number][] {
+  const width = Math.max(...pattern.map(([px]) => px)) + 1
+  const height = Math.max(...pattern.map(([, py]) => py)) + 1
+  const [left, top] = [x - Math.floor(width / 2), y - Math.floor(height / 2)]
+  return pattern.map(([px, py]) => [left + px, top + py])
+}
+
 /** A copy of `cells` with the pattern added, centred on the cell (x, y). */
 export function stamp(
   cells: ReadonlySet<number>,
@@ -54,12 +66,7 @@ export function stamp(
   x: number,
   y: number,
 ): Set<number> {
-  const width = Math.max(...pattern.map(([px]) => px)) + 1
-  const height = Math.max(...pattern.map(([, py]) => py)) + 1
-  const [left, top] = [x - Math.floor(width / 2), y - Math.floor(height / 2)]
   const next = new Set(cells)
-  for (const [px, py] of pattern) {
-    if (inBounds(left + px, top + py)) next.add(pack(left + px, top + py))
-  }
+  for (const [cx, cy] of centred(pattern, x, y)) if (inBounds(cx, cy)) next.add(pack(cx, cy))
   return next
 }

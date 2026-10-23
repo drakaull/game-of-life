@@ -9,6 +9,7 @@ export interface KeyActions {
   recenter(): void
   toggleHelp(): void
   toggleLibrary(): void
+  cancelPlacing(): void
 }
 
 const PAN_STEP = 80 // CSS pixels per arrow press
@@ -49,6 +50,8 @@ export function attachKeyboard(actions: KeyActions): void {
       if (!event.repeat) [spaceDown, spaceUsed] = [true, false]
       return
     }
+    // Escape also closes the panels (popovers): give up placing without blocking that default.
+    if (event.key === 'Escape') return actions.cancelPlacing()
     const action = shortcuts[event.key.length === 1 ? event.key.toLowerCase() : event.key]
     if (!action) return
     event.preventDefault()

@@ -4,7 +4,7 @@
 // - two fingers pan and pinch-zoom (a second finger cancels the stroke in progress);
 // - the wheel zooms around the pointer.
 export type Cell = [number, number]
-type Point = [number, number]
+export type Point = [number, number]
 
 /** Cells from `from` to `to`, ends included, each touching the previous one (Bresenham). */
 export function line([x0, y0]: Cell, [x1, y1]: Cell): Cell[] {
@@ -38,6 +38,12 @@ export interface BoardHandlers {
   pan(dx: number, dy: number): void
   /** Multiply the zoom by `factor`, keeping the point (sx, sy) still. */
   zoom(sx: number, sy: number, factor: number): void
+  /** True while a chosen pattern waits to be placed. */
+  isPlacing(): boolean
+  /** Where the pattern's ghost follows the pointer, in canvas CSS pixels; undefined hides it. */
+  aim(point: Point | undefined): void
+  place(sx: number, sy: number): void
+  cancelPlacing(): void
 }
 
 const midpoint = ([ax, ay]: Point, [bx, by]: Point): Point => [(ax + bx) / 2, (ay + by) / 2]
@@ -77,6 +83,10 @@ export function attachPointer(canvas: HTMLCanvasElement, handlers: BoardHandlers
     if (event.button === 1 || (event.button === 0 && spaceHeld)) {
       mode = 'pan'
       canvas.classList.add('panning')
+    } else if (handlers.isPlacing() && event.pointerType === 'mouse') {
+      // Placing with the mouse: left click drops the pattern, right click gives up.
+      if (event.button === 0) handlers.place(event.offsetX, event.offsetY)
+      else if (event.button === 2) handlers.cancelPlacing()
     } else if (event.button === 0) {
       mode = 'draw'
       last = handlers.toCell(event.offsetX, event.offsetY)
@@ -84,7 +94,14 @@ export function attachPointer(canvas: HTMLCanvasElement, handlers: BoardHandlers
     }
   })
 
+  // The ghost follows a hovering mouse; it hides when the mouse leaves the board.
+  canvas.addEventListener('contextmenu', (event) => handlers.isPlacing() && event.preventDefault())
+  canvas.addEventListener('pointerleave', () => handlers.isPlacing() && handlers.aim(undefined))
+
   canvas.addEventListener('pointermove', (event) => {
+    if (event.pointerType === 'mouse' && handlers.isPlacing()) {
+      handlers.aim([event.offsetX, event.offsetY])
+    }
     const before = points.get(event.pointerId)
     if (!before) return
     const now: Point = [event.offsetX, event.offsetY]

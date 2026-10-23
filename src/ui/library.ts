@@ -32,6 +32,8 @@ export function attachLibrary(choose: (id: PatternId, fromKeyboard: boolean) => 
     )
     return `<section><h3 class="library-family" data-i18n="${`family.${family}` satisfies TranslationKey}"></h3><ul class="cards">${cards.join('')}</ul></section>`
   }).join('')
+  // Opening the popover moves focus here, so keyboard users land on the cards.
+  list.querySelector('.card')!.setAttribute('autofocus', '')
 
   list.addEventListener('click', (event) => {
     const card = (event.target as Element).closest<HTMLElement>('[data-pattern]')
