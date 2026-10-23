@@ -4,7 +4,7 @@
 // - two fingers pan and pinch-zoom (a second finger cancels the stroke in progress);
 // - the wheel zooms around the pointer.
 export type Cell = [number, number]
-type Point = [number, number]
+export type Point = [number, number]
 
 /** Cells from `from` to `to`, ends included, each touching the previous one (Bresenham). */
 export function line([x0, y0]: Cell, [x1, y1]: Cell): Cell[] {
@@ -38,6 +38,12 @@ export interface BoardHandlers {
   pan(dx: number, dy: number): void
   /** Multiply the zoom by `factor`, keeping the point (sx, sy) still. */
   zoom(sx: number, sy: number, factor: number): void
+  /** True while a chosen pattern waits to be placed. */
+  isPlacing(): boolean
+  /** Where the pattern's ghost follows the pointer, in canvas CSS pixels; undefined hides it. */
+  aim(point: Point | undefined): void
+  place(sx: number, sy: number): void
+  cancelPlacing(): void
 }
 
 const midpoint = ([ax, ay]: Point, [bx, by]: Point): Point => [(ax + bx) / 2, (ay + by) / 2]
@@ -45,7 +51,7 @@ const distance = ([ax, ay]: Point, [bx, by]: Point) => Math.hypot(bx - ax, by - 
 
 export function attachPointer(canvas: HTMLCanvasElement, handlers: BoardHandlers): void {
   const points = new Map<number, Point>()
-  let mode: 'draw' | 'pan' | 'pinch' | undefined
+  let mode: 'draw' | 'place' | 'pan' | 'pinch' | undefined
   let last: Cell = [0, 0]
   let spaceHeld = false
 
@@ -69,6 +75,8 @@ export function attachPointer(canvas: HTMLCanvasElement, handlers: BoardHandlers
     points.set(event.pointerId, [event.offsetX, event.offsetY])
     if (points.size === 2 && event.pointerType === 'touch') {
       if (mode === 'draw') handlers.cancel()
+      // A pinch while aiming hides the ghost; the pattern waits for the next single finger.
+      if (mode === 'place') handlers.aim(undefined)
       mode = 'pinch'
       return
     }
@@ -77,6 +85,14 @@ export function attachPointer(canvas: HTMLCanvasElement, handlers: BoardHandlers
     if (event.button === 1 || (event.button === 0 && spaceHeld)) {
       mode = 'pan'
       canvas.classList.add('panning')
+    } else if (handlers.isPlacing() && event.pointerType === 'mouse') {
+      // Placing with the mouse: left click drops the pattern, right click gives up.
+      if (event.button === 0) handlers.place(event.offsetX, event.offsetY)
+      else if (event.button === 2) handlers.cancelPlacing()
+    } else if (handlers.isPlacing()) {
+      // Placing with a finger: the ghost follows it and the pattern lands when it lifts.
+      mode = 'place'
+      handlers.aim([event.offsetX, event.offsetY])
     } else if (event.button === 0) {
       mode = 'draw'
       last = handlers.toCell(event.offsetX, event.offsetY)
@@ -84,7 +100,14 @@ export function attachPointer(canvas: HTMLCanvasElement, handlers: BoardHandlers
     }
   })
 
+  // The ghost follows a hovering mouse; it hides when the mouse leaves the board.
+  canvas.addEventListener('contextmenu', (event) => handlers.isPlacing() && event.preventDefault())
+  canvas.addEventListener('pointerleave', () => handlers.isPlacing() && handlers.aim(undefined))
+
   canvas.addEventListener('pointermove', (event) => {
+    if (event.pointerType === 'mouse' && handlers.isPlacing()) {
+      handlers.aim([event.offsetX, event.offsetY])
+    }
     const before = points.get(event.pointerId)
     if (!before) return
     const now: Point = [event.offsetX, event.offsetY]
@@ -93,6 +116,8 @@ export function attachPointer(canvas: HTMLCanvasElement, handlers: BoardHandlers
       // A fast drag skips cells between two events: fill the gap.
       for (const between of line(last, cell).slice(1)) handlers.move(between)
       last = cell
+    } else if (mode === 'place') {
+      handlers.aim(now)
     } else if (mode === 'pan') {
       handlers.pan(now[0] - before[0], now[1] - before[1])
     } else if (mode === 'pinch') {
@@ -111,6 +136,10 @@ export function attachPointer(canvas: HTMLCanvasElement, handlers: BoardHandlers
     if (mode === 'draw') {
       if (event.type === 'pointercancel') handlers.cancel()
       else handlers.end()
+    }
+    if (mode === 'place') {
+      if (event.type === 'pointercancel') handlers.aim(undefined)
+      else handlers.place(event.offsetX, event.offsetY)
     }
     // After a pinch, the finger left on the screen does nothing until it is lifted too.
     if (mode !== 'pinch' || points.size === 0) mode = undefined

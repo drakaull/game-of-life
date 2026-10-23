@@ -11,6 +11,8 @@ export function render(
   cells: ReadonlySet<number>,
   width: number,
   height: number,
+  /** World cells of a pattern waiting to be placed, drawn translucent over the board. */
+  ghost: readonly [number, number][] = [],
 ): void {
   const style = getComputedStyle(document.documentElement)
   const dpr = devicePixelRatio
@@ -35,11 +37,10 @@ export function render(
 
   ctx.fillStyle = style.getPropertyValue('--color-accent')
   const gap = grid ? line : 0
-  for (const cell of cells) {
-    const [cx, cy] = unpack(cell)
+  const drawCell = (cx: number, cy: number) => {
     const left = snap((cx - x) * zoom)
     const top = snap((cy - y) * zoom)
-    if (left + zoom < 0 || top + zoom < 0 || left > width || top > height) continue
+    if (left + zoom < 0 || top + zoom < 0 || left > width || top > height) return
     ctx.fillRect(
       left + gap,
       top + gap,
@@ -47,4 +48,8 @@ export function render(
       snap((cy + 1 - y) * zoom) - top - gap,
     )
   }
+  for (const cell of cells) drawCell(...unpack(cell))
+  ctx.globalAlpha = 0.35
+  for (const [cx, cy] of ghost) drawCell(cx, cy)
+  ctx.globalAlpha = 1
 }

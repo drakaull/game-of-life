@@ -6,10 +6,12 @@ import './styles/app.css'
 import { History } from './engine/history.ts'
 import { inBounds, pack, step, unpack } from './engine/life.ts'
 import { attachKeyboard } from './input/keyboard.ts'
-import { attachPointer, type Cell } from './input/pointer.ts'
+import { centred, patternCells, stamp } from './engine/patterns.ts'
+import { attachPointer, type Cell, type Point } from './input/pointer.ts'
 import { detectLang } from './i18n/lang.ts'
 import { attachControls } from './ui/controls.ts'
 import { applyLanguage, attachLanguageSwitch } from './ui/language.ts'
+import { attachLibrary } from './ui/library.ts'
 import { attachThemeToggle } from './ui/theme.ts'
 import { fit, pan, screenToWorld, zoomAt } from './view/camera.ts'
 import { render } from './view/render.ts'
@@ -38,6 +40,8 @@ let playing = false
 let speed = 4 // generations per second
 let dirty = true
 let limitReached = false
+// A pattern chosen in the library, waiting to be placed; `at` is where its ghost is shown.
+let placing: { pattern: [number, number][]; at?: Point } | undefined
 const history = new History<Snapshot>()
 // Bounds history memory (~40 MB worst case) and keeps every frame responsive.
 const CELL_LIMIT = 50_000
@@ -64,6 +68,22 @@ function advance(): boolean {
   generation++
   dirty = true
   return true
+}
+
+const cellAt = (sx: number, sy: number) => screenToWorld(camera, sx, sy).map(Math.floor) as Cell
+
+/** Drops the chosen pattern centred on the cell under (sx, sy), as one undoable change. */
+function placeAt(sx: number, sy: number) {
+  if (!placing) return
+  const next = stamp(cells, placing.pattern, ...cellAt(sx, sy))
+  placing = undefined
+  dirty = true
+  if (next.size > CELL_LIMIT) {
+    limitReached = true
+    return
+  }
+  history.push(snapshot())
+  cells = next
 }
 
 /** Swaps in a whole new board as one undoable change. */
@@ -130,6 +150,11 @@ const actions = {
     dirty = true
   },
   toggleHelp: () => document.getElementById('help')!.togglePopover(),
+  toggleLibrary: () => document.getElementById('library')!.togglePopover(),
+  cancelPlacing() {
+    placing = undefined
+    dirty = true
+  },
 }
 
 // Drawing: the first cell touched decides whether the whole stroke paints or erases.
@@ -141,7 +166,7 @@ function setCell([x, y]: Cell) {
   dirty = true
 }
 attachPointer(canvas, {
-  toCell: (sx, sy) => screenToWorld(camera, sx, sy).map(Math.floor) as Cell,
+  toCell: cellAt,
   start(cell) {
     const [x, y] = cell
     const paint = !inBounds(x, y) || !cells.has(pack(x, y))
@@ -160,16 +185,30 @@ attachPointer(canvas, {
   },
   pan: actions.pan,
   zoom: (sx, sy, factor) => actions.zoom(factor, sx, sy),
+  isPlacing: () => placing !== undefined,
+  aim(point) {
+    if (placing) placing.at = point
+    dirty = true
+  },
+  place: placeAt,
+  cancelPlacing: actions.cancelPlacing,
 })
 attachKeyboard(actions)
 const updateControls = attachControls(actions, CELL_LIMIT)
+attachLibrary((id, fromKeyboard) => {
+  placing = { pattern: patternCells(id) }
+  dirty = true
+  // No pointer to aim with: drop it in the middle of the screen at once.
+  if (fromKeyboard) placeAt(canvas.clientWidth / 2, canvas.clientHeight / 2)
+})
 attachLanguageSwitch(() => (dirty = true))
 applyLanguage(detectLang(location.search, navigator.languages))
 
 function draw() {
-  render(ctx, camera, cells, canvas.clientWidth, canvas.clientHeight)
+  const ghost = placing?.at ? centred(placing.pattern, ...cellAt(...placing.at)) : []
+  render(ctx, camera, cells, canvas.clientWidth, canvas.clientHeight, ghost)
   const state = { playing, canGoBack: history.canGoBack, generation, speed, limitReached }
-  updateControls({ ...state, population: cells.size })
+  updateControls({ ...state, population: cells.size, placing: placing !== undefined })
   dirty = false
 }
 attachThemeToggle(draw)
