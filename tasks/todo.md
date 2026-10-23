@@ -6,7 +6,7 @@ is checked with `playwright-cli` in light + dark, desktop + ~390 px, Chrome + Fi
 
 ## Phase 1: Data (`feature/pattern-library`, TDD)
 
-- [ ] **Task 1: RLE parser**
+- [x] **Task 1: RLE parser**
   - Acceptance: `parseRle` handles runs, blank rows (`2$`), omitted trailing dead cells, a header
     line and `#` comments; throws on invalid input; returns cells relative to the top-left corner.
   - Verify: `npm test -- src/engine/rle.test.ts`; coverage ≥ 90 %.
