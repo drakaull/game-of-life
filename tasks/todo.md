@@ -13,7 +13,7 @@ is checked with `playwright-cli` in light + dark, desktop + ~390 px, Chrome + Fi
   - Files: `src/engine/rle.ts`, `src/engine/rle.test.ts`
   - Scope: S
 
-- [ ] **Task 2: The 17 patterns and `stamp()`**
+- [x] **Task 2: The 17 patterns and `stamp()`**
   - Acceptance: every pattern passes its behaviour test from the spec (still lifes, periods,
     spaceship shifts, Gosper gun +5 cells / 30 gens, diehard 130, R-pentomino 1103 / 116,
     acorn 5206 / 633); `stamp` adds cells centred on a target and keeps existing ones.
@@ -23,7 +23,7 @@ is checked with `playwright-cli` in light + dark, desktop + ~390 px, Chrome + Fi
 
 ### Checkpoint A: Data
 
-- [ ] All tests pass, coverage ≥ 90 % on `src/engine`; suite duration reported to Léonard
+- [x] All tests pass, coverage ≥ 90 % on `src/engine`; suite duration reported to Léonard
 
 ## Phase 2: Interface
 
