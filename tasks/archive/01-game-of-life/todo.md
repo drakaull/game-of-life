@@ -126,7 +126,7 @@ is checked with `playwright-cli` in light + dark, desktop + ~390 px, Chrome + Fi
   - Files: `vite.config.ts`, `docs/deployment-checklist.md`
   - Scope: S
 
-- [ ] **Task 14: README and GitHub repository**
+- [x] **Task 14: README and GitHub repository**
   - Acceptance: English README (description, screenshot, local setup, stack, "© Léonard Fontaine. All rights reserved."); repo description proposed to Léonard; public repo `game-of-life` created with `gh` **after his "yes"**, Website field set to `https://life.leonard-fontaine.com`.
   - Verify: README renders on GitHub; `gh repo view` shows description and homepage.
   - Files: `README.md`, `docs/screenshot.png`
@@ -134,7 +134,7 @@ is checked with `playwright-cli` in light + dark, desktop + ~390 px, Chrome + Fi
 
 ### Final checkpoint: Release v1.0.0
 
-- [ ] All 10 spec success criteria met
-- [ ] Full review before merge
-- [ ] Merge `feature/release-prep` → `develop`, then `develop` → `main` ("Release v1.0.0"), annotated tag `v1.0.0`, push main, develop and tag, each after Léonard's "yes"
-- [ ] Plan archived to `tasks/archive/01-game-of-life/`
+- [x] All 10 spec success criteria met
+- [x] Full review before merge
+- [x] Merge `feature/release-prep` → `develop`, then `develop` → `main` ("Release v1.0.0"), annotated tag `v1.0.0`, push main, develop and tag, each after Léonard's "yes"
+- [x] Plan archived to `tasks/archive/01-game-of-life/`
